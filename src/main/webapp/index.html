@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-    <script>parent.instrument && parent.instrument(window);</script>
+    <script>opener && opener.instrument && opener.instrument(window);</script>
     <script src="lib/jquery-1.6.1.js"></script>
     <script src="lib/jquery.mobile-1.0b1-oc2.js"></script>
     <script src="lib/angular-0.9.15.js"></script>
@@ -14,9 +14,48 @@
 
     <link rel="stylesheet" href="lib/jquery.mobile-1.0b1-oc2.css"/>
 
+    <script src="js/ocxhr.js"></script>
+    <script src="js/phoneService.js"></script>
+    <script src="js/PhoneListCtrl.js"></script>
+
     <title>Google Phone Gallery</title>
 </head>
 <body>
+
+<div data-role="page" id="phonelist" ng:controller="PhoneListCtrl">
+    <div data-role="header" data-backbtn="false">
+        <h1>Phones</h1>
+    </div>
+    <div data-role="content">
+        <ul data-role="listview">
+            <li ng:repeat="phone in phones">
+                {{phone.name}}
+            </li>
+            <!--
+            <li>
+                <input data-type="search" placeholder="<%=rbu.getString("L006_suchAnzeige")%>" name="$parent.searchName" autofocus/>
+            </li>
+            <li class="ui-li-listenansicht" ng:repeat="datenkonzentrator in pagedDatenkonzentratoren()">
+                 <a href="#"  ngm:click="select(datenkonzentrator);">
+                    <div class="ui-grid-datenkonzentratoren clickbarerListeneintrag paddingIconRight">
+                        <div class="ui-block-a fontBold">{{datenkonzentrator.name}}</div>
+                        <div class="ui-block-b"></div>
+                        <div class="ui-block-a">{{datenkonzentrator.ort}}</div>
+                        <div class="ui-block-b">{{datenkonzentrator.zustand}}</div>
+                    </div>
+                 </a>
+            </li>
+            <li id="noFilterMatch" ng:if="pagedDatenkonzentratoren().length == 0">
+               <h2><%=rbu.getString("L006_keineDatenFilter")%></h2>
+            </li>
+            <li ng:if="pagedDatenkonzentratoren().hasMorePages()">
+                <a href="#" data-theme="c" class="noCornerRadius" ngm:click="pagedDatenkonzentratoren().loadNextPage()"><%=rbu.getString("ALG_Weitere_DS")%></a>
+            </li>-->
+
+        </ul>
+    </div>
+</div>
+
 
 </body>
 </html>
