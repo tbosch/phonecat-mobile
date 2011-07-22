@@ -1,0 +1,11 @@
+# Ignore target
+target
+
+# Ignore IDEA files
+.idea
+*.iml
+*.ipr
+*.iws
+
+# Ignore Mac OS files
+.DS_Store
