@@ -12,39 +12,6 @@
     <script type="text/javascript" src="lib/jasmine.js"></script>
     <script type="text/javascript" src="lib/jasmine-html.js"></script>
 
-    <!-- Script for detecting javascript urls in directory listings and including them in the current page -->
-    <script type="text/javascript">
-        function getUrlContent(url) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, false);
-            xhr.send();
-            return xhr.responseText;
-        }
-
-        function findJsUrls(text) {
-            var regex = /href\s*=\s*"([^"]+.js)"/ig;
-            var match;
-            var res = [];
-            while (match = regex.exec(text) ) {
-                res.push(match[1]);
-            }
-            return res;
-        }
-
-        function writeJsLinksToDocument(links) {
-            var lessThan = String.fromCharCode(60);
-            for (var i=0; i<links.length; i++) {
-                document.write(lessThan+'script type="text/javascript" src="'+links[i]+'">'+lessThan+"/script>");
-            }
-        }
-
-        function loadDir(dir) {
-            var content = getUrlContent(dir);
-            var jsUrls = findJsUrls(content);
-            writeJsLinksToDocument(jsUrls);
-        }
-    </script>
-
 <!-- #################################################################################################
      #### ADD YOUR LIBS AND SPECS HERE ###############################################################
      ################################################################################################# -->
@@ -56,14 +23,14 @@
     <script src="lib/jquery.mobile-1.0b1-oc2.js"></script>
     <script src="lib/jquery-mobile-angular-adapter.js"></script>
 
-    <script type="text/javascript">
-        loadDir('js/');
-    </script>
+    <script type="text/javascript" src="js/ocxhr.js"></script>
+    <script type="text/javascript" src="js/PhoneListCtrl.js"></script>
+    <script type="text/javascript" src="js/phoneService.js"></script>
 
     <!-- include spec files here... -->
-    <script type="text/javascript">
-        loadDir('unit/');
-    </script>
+    <script type="text/javascript" src="unit/ocxhrSpec.js"></script>
+    <script type="text/javascript" src="unit/PhoneListCtrlSpec.js"></script>
+    <script type="text/javascript" src="unit/phoneServiceSpec.js"></script>
 
 <!-- ################################################################################################# -->
 
