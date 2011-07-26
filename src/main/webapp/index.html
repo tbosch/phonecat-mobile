@@ -17,6 +17,7 @@
     <script src="js/ocxhr.js"></script>
     <script src="js/phoneService.js"></script>
     <script src="js/PhoneListCtrl.js"></script>
+    <script src="js/PhoneDetailCtrl.js"></script>
 
     <title>Google Phone Gallery</title>
 </head>
@@ -25,37 +26,30 @@
 <div data-role="page" id="phonelist" ng:controller="PhoneListCtrl">
     <div data-role="header" data-backbtn="false">
         <h1>Phones</h1>
+        <a href="" class="sortUp" data-icon="arrow-u" ngm:click="sortDescend = false"></a>
+        <a href="" class="sortDown" data-icon="arrow-d" ngm:click="sortDescend = true"></a>
+
     </div>
     <div data-role="content">
         <ul data-role="listview">
-            <li ng:repeat="phone in phones">
-                {{phone.name}}
-            </li>
-            <!--
             <li>
-                <input data-type="search" placeholder="<%=rbu.getString("L006_suchAnzeige")%>" name="$parent.searchName" autofocus/>
+                <input data-type="search" class="search" placeholder="Search" name="search" autofocus/>
             </li>
-            <li class="ui-li-listenansicht" ng:repeat="datenkonzentrator in pagedDatenkonzentratoren()">
-                 <a href="#"  ngm:click="select(datenkonzentrator);">
-                    <div class="ui-grid-datenkonzentratoren clickbarerListeneintrag paddingIconRight">
-                        <div class="ui-block-a fontBold">{{datenkonzentrator.name}}</div>
-                        <div class="ui-block-b"></div>
-                        <div class="ui-block-a">{{datenkonzentrator.ort}}</div>
-                        <div class="ui-block-b">{{datenkonzentrator.zustand}}</div>
-                    </div>
-                 </a>
+            <li ng:repeat="phone in pagedPhones()" class="phone">
+                <a href="#phonedetail" ngm:click="$parent.selectedPhone = phone">{{phone.name}}</a>
             </li>
-            <li id="noFilterMatch" ng:if="pagedDatenkonzentratoren().length == 0">
-               <h2><%=rbu.getString("L006_keineDatenFilter")%></h2>
+            <li ng:if="pagedPhones().hasMorePages()">
+                <a href="#" data-theme="c" class="loadNext noCornerRadius" ngm:click="pagedPhones().loadNextPage()">Load next...</a>
             </li>
-            <li ng:if="pagedDatenkonzentratoren().hasMorePages()">
-                <a href="#" data-theme="c" class="noCornerRadius" ngm:click="pagedDatenkonzentratoren().loadNextPage()"><%=rbu.getString("ALG_Weitere_DS")%></a>
-            </li>-->
-
         </ul>
     </div>
 </div>
 
+<div data-role="page" id="phonedetail" ng:controller="PhoneDetailCtrl">
+    <div data-role="header" data-backbtn="false">
+        <h1>{{data.name}}</h1>
+    </div>
+</div>
 
 </body>
 </html>

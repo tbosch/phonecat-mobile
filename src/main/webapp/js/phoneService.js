@@ -3,8 +3,13 @@ angular.service('phoneService', function(xhr) {
         return xhr('phones/phones.json', {dataType:"json"});
     }
 
+    function phone(id) {
+        return xhr('phones/'+id+'.json', {dataType:"json"});
+    }
+
     return {
-        phones: phones
+        phones: phones,
+        phone: phone
     }
 
 }, {$inject: ['ocxhr']});
