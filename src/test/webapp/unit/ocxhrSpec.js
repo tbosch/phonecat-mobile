@@ -2,7 +2,7 @@ define(['lib/jasmine', 'lib/jquery'], function(jasmine, $) {
     var ajaxSpy = jasmine.createSpy();
     var updateViewSpy = jasmine.createSpy();
 
-    define('lib/angular', function() {
+    define('lib/jqm-ng', function() {
         return {
             updateView: updateViewSpy
         };

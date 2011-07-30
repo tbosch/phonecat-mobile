@@ -29,7 +29,7 @@ jasmine.ui = {};
  * The central logging function.
  */
 jasmine.ui.log = function(msg) {
-    console.log(msg);
+    //console.log(msg);
 };
 
 
@@ -111,7 +111,8 @@ jasmine.ui.log = function(msg) {
                 return true;
             }
         }
-        var handlers = testframe().asyncWaitHandlers || {};
+        var fr = testframe();
+        var handlers = fr.asyncWaitHandlers || {};
         for (var name in handlers) {
             if (handlers[name]()) {
                 jasmine.ui.log("async waiting for " + name);
@@ -288,7 +289,7 @@ jasmine.ui.log = function(msg) {
             proxyAddEventFunction(win, 'addEventListener', {'load': loadCallback});
 
             // A fallback to window.onload, that will always work
-            win.addEventListener("load", callback, false);
+            win.addEventListener("load", loadCallback, false);
 
             // If IE event model is used
         } else if (doc.attachEvent) {
@@ -298,29 +299,23 @@ jasmine.ui.log = function(msg) {
             proxyAddEventFunction(win, 'attachEvent', {'load': loadCallback});
 
             // A fallback to window.onload, that will always work
-            win.attachEvent("onload", callback);
+            win.attachEvent("onload", loadCallback);
         }
     }
 
     window.instrument = function(fr) {
         try {
             jasmine.ui.log("Beginn instrumenting frame " + fr.name + " with url " + fr.location.href);
-            fr.instrumented = true;
-            /*
-             var scriptElement = fr.createElement('script');
-             scriptElement.innerHTML = '';
-             */
-            addLoadEventListener(fr);
             fr.loadHtmlError = null;
             fr.loadHtmlReady = false;
             jasmine.ui.addAsyncWaitHandler(fr, 'loading', function() {
                 if (fr.loadHtmlError) {
-                    jasmine.ui.log("Error during instrumenting frame " + fr.name + ": " + fr.loadHtmlError);
+                    jasmine.ui.log("Error during loading page: " + fr.loadHtmlError);
                     throw fr.loadHtmlError;
                 }
                 return !fr.loadHtmlReady;
             });
-
+            addLoadEventListener(fr);
             callInstrumentListeners(fr);
         } catch (ex) {
             fr.loadHtmlError = ex;
