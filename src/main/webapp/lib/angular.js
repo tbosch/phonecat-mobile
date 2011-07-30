@@ -1,7 +1,11 @@
-/**
- * Created by IntelliJ IDEA.
- * User: tbo
- * Date: 30.07.11
- * Time: 13:26
- * To change this template use File | Settings | File Templates.
- */
+define(['lib/global!lib/impl/angular-0.9.15:lib/jquery'], function() {
+    function updateView() {
+        // TODO
+        // This is a hack using jquery mobile angular adapter.
+        return $.mobile.globalScope().$service('$updateView')();
+
+    }
+    return {
+        updateView: updateView
+    }
+});

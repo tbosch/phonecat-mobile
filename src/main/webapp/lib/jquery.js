@@ -1,7 +1,3 @@
-/**
- * Created by IntelliJ IDEA.
- * User: tbo
- * Date: 30.07.11
- * Time: 13:27
- * To change this template use File | Settings | File Templates.
- */
+define(['lib/global!lib/impl/jquery-1.6.1'], function() {
+    return $;
+});

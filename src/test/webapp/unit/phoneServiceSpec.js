@@ -1,4 +1,4 @@
-define(function() {
+define(['lib/jasmine', 'lib/jquery'], function(jasmine, $) {
     var mockXhr = jasmine.createSpy();
 
     define('js/ocxhr', function() {

@@ -1,16 +1,20 @@
-define(function() {
+define(['lib/jasmine', 'lib/jquery'], function(jasmine, $) {
     var ajaxSpy = jasmine.createSpy();
     var updateViewSpy = jasmine.createSpy();
 
-    define('$updateView', function() {
-        return updateViewSpy;
+    define('lib/angular', function() {
+        return {
+            updateView: updateViewSpy
+        };
     });
 
-    define('$ajax', function() {
-        return ajaxSpy;
+    define('lib/jquery', function() {
+        return {
+            ajax: ajaxSpy
+        };
     });
 
-    require({context: 'ocxhrSpec'}, ['js/ocxhr'], function(ocxhr) {
+    require({context: 'ocxhrSpec'}, ['js/ocxhr', 'lib/jquery'], function(ocxhr) {
         describe('ocxhr', function() {
             beforeEach(function() {
                 ajaxSpy.reset();

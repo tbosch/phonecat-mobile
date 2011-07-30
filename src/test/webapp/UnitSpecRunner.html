@@ -7,38 +7,16 @@
 <head>
     <title>Jasmine Test Runner</title>
 
-    <link rel="stylesheet" href="lib/jasmine.css"/>
-
-    <script type="text/javascript" src="lib/jasmine.js"></script>
-    <script type="text/javascript" src="lib/jasmine-html.js"></script>
+    <link rel="stylesheet" href="lib/impl/jasmine.css"/>
 
 <!-- #################################################################################################
      #### ADD YOUR LIBS AND SPECS HERE ###############################################################
      ################################################################################################# -->
-
-    <!-- include lib files here... -->
-    <script src="lib/jquery-1.6.1.js"></script>
-    <script src="lib/jquery.mobile.noinit.js"></script>
-    <script src="lib/angular-0.9.15.js"></script>
-    <script src="lib/jquery.mobile-1.0b1-oc2.js"></script>
-    <script src="lib/jquery-mobile-angular-adapter.js"></script>
-
-    <!-- include spec files here... -->
     <script src="lib/require.js" data-main="main-unit"></script>
-    <script>
-        require.s.contexts['_'].jQueryCheck();
-    </script>
 
 <!-- ################################################################################################# -->
 
 </head>
 <body>
-<!-- execute jasmine tests -->
-<script>
-$(function() {
-    jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-    jasmine.getEnv().execute();
-    });
-</script>
 </body>
 </html>

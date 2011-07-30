@@ -1,4 +1,4 @@
 // require-js wrapper around jasmine
-define(['lib/order!lib/impl/jasmine.js:lib/impl/jasmine-html.js:lib/impl/jasmine-ui.js'], function() {
-
+define(['lib/global!lib/global!lib/impl/jasmine-ui:lib/jasmine'], function() {
+    return jasmine.ui;
 });

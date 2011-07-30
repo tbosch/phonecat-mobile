@@ -7,22 +7,13 @@
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
     <script>opener && opener.instrument && opener.instrument(window);</script>
-    <script src="lib/jquery-1.6.1.js"></script>
     <script data-main="main" src="lib/require.js"></script>
 
-    <script src="lib/jquery.mobile-1.0b1-oc2.js"></script>
-    <script src="lib/angular-0.9.15.js"></script>
-    <script src="lib/jquery-mobile-angular-adapter.js"></script>
-    <script>
-        require.s.contexts['_'].jQueryCheck();
-    </script>
-
-    <link rel="stylesheet" href="lib/jquery.mobile-1.0b1-oc2.css"/>
+    <link rel="stylesheet" href="lib/impl/jquery.mobile-1.0b1-oc2.css"/>
 
     <title>Google Phone Gallery</title>
 </head>
 <body>
-
 <div data-role="page" id="phonelist" ng:controller="PhoneListCtrl">
     <div data-role="header" data-backbtn="false">
         <h1>Phones</h1>

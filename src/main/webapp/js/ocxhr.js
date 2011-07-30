@@ -1,8 +1,8 @@
-define(["$updateView", "$ajax"], function(updateView, ajax) {
+define(["lib/angular", "lib/jquery"], function(angular, jquery) {
 
     function ocxhr(url, options) {
-        var res = ajax(url, options);
-        res.always(updateView);
+        var res = jquery.ajax(url, options);
+        res.always(angular.updateView);
         return res;
     }
 

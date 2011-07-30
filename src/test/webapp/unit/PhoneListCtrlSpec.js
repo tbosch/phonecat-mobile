@@ -1,4 +1,4 @@
-define(['phonesTestData'], function(testData) {
+define(['phonesTestData', 'lib/jasmine', 'lib/jquery'], function(testData, jasmine, $) {
     var phonesSpy = jasmine.createSpy();
     var phoneSpy = jasmine.createSpy();
 

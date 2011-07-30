@@ -1,5 +1,16 @@
 /**
- * require.js module that loads dependencies in the right order.
+ * require.js module to support libraries that use the global object.
+ * <p>
+ * All of these modules must only be loaded once, no matter which context
+ * is used (especially important for tests.).
+ * This is done automatically by this module.
+ * <p>
+ * Also, those libraries need to be loaded in a defined order,
+ * as they do not provide a way to declare their dependencies.
+ *
+ *
+ *
+ * that loads dependencies in the right order.
  * Syntax for the name: A:B:C:.... The result is returned as a js array.
  * <p>
  * This should work well in all browsers, in contrast to the
@@ -9,31 +20,35 @@
  * in global variables. For this, this will not reload a library
  * if a different require-js context ist used!
  */
+
+// Global function to register dependencies for modules
+// loaded via the global plugin.
+// Syntax: lib/global!mymodel:a,b,c
+
+
 define({
     load: function (name, req, load, config) {
         var results = window.orderjsCache = window.orderjsCache || [];
 
-        var names = name.split(":");
-        var res = [];
-
-        function callreq(currIndex) {
-            if (currIndex==names.length) {
-                load(res);
-            } else {
-                var name = names[currIndex];
-                function callback(partres) {
-                    res.push(partres);
-                    results[name] = partres;
-                    callreq(currIndex+1);
-                };
-                if (name in results) {
-                    callback(results[name]);
-                } else {
-                    req([name], partres);
-                }
+        var parts = name.split(":");
+        var moduleName = parts[0];
+        var depsStr = parts[1] || '';
+        var deps = depsStr.split(',');
+        if (moduleName in results) {
+            load(true);
+        } else {
+            function callback() {
+                req([moduleName], function() {
+                    results[moduleName] = true;
+                    load(true);
+                });
             }
+            if (deps.length>0) {
+                req(deps, callback);
+            } else {
+                callback();
+            };
         }
-        callreq(0);
     },
 
     write: function (pluginName, moduleName, write) {

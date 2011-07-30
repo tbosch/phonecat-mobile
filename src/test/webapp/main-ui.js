@@ -1,3 +1,6 @@
-require(["ui/phonelistSpec"]);
+require([
+    "lib/jasmine-html",
+    "ui/phonelistSpec"
+]);
 
 
