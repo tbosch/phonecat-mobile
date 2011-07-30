@@ -1,14 +1,16 @@
-function PhoneDetailCtrl(phoneService) {
-    this.phoneService = phoneService;
-}
+define(["js/phoneService"], function(phoneService) {
 
-PhoneDetailCtrl.prototype = {
-    onActivate: function(prevScope) {
-        var self = this;
-        this.phoneService.phone(prevScope.selectedPhone.id).done(function(phone) {
-            self.data = phone;
-        });
+    function PhoneDetailCtrl() {
     }
-}
 
-PhoneDetailCtrl.$inject = ['phoneService'];
+    PhoneDetailCtrl.prototype = {
+        onActivate: function(prevScope) {
+            var self = this;
+            phoneService.phone(prevScope.selectedPhone.id).done(function(phone) {
+                self.data = phone;
+            });
+        }
+    }
+
+    return PhoneDetailCtrl;
+});

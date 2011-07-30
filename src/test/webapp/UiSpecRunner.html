@@ -24,7 +24,11 @@
     <script type="text/javascript" src="lib/testutils.js"></script>
 
     <!-- include spec files here... -->
-    <script type="text/javascript" src="ui/phonelistSpec.js"></script>
+    <!-- include spec files here... -->
+    <script src="lib/require.js" data-main="main-ui"></script>
+    <script>
+        require.s.contexts['_'].jQueryCheck();
+    </script>
 
 <!-- ################################################################################################# -->
 
@@ -32,8 +36,10 @@
 <body>
 <!-- execute jasmine tests -->
 <script type="text/javascript">
-    jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-    jasmine.getEnv().execute();
+    $(function() {
+        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        jasmine.getEnv().execute();
+    });
 </script>
 </body>
 </html>
