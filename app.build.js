@@ -1,10 +1,10 @@
 ({
-    appDir: "src/main/webapp",
+    appDir: "tmp",
     baseUrl: ".",
     dir: "build",
     modules: [
         {
-            name: "main"
+            name: "main-unit"
         }
     ]
 })
