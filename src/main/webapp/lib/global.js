@@ -21,8 +21,12 @@ define({
         }
         var parts = name.split(":");
         var moduleName = parts[0];
-        var depsStr = parts[1] || '';
-        var deps = depsStr.split(',');
+        var deps;
+        if (parts[1]) {
+            deps = parts[1].split(',');
+        } else {
+            deps = [];
+        }
         if (moduleName in cachedResults) {
             load(true);
         } else {
