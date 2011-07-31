@@ -27,6 +27,51 @@
                     </webAppConfig>
                 </configuration>
             </plugin>
+	<plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>sh</executable>
+          <workingDirectory>${basedir}</workingDirectory>
+          <arguments>
+            <argument>build-web.sh</argument>
+ 			<!-- TODO make this configurable! (optimization level) -->
+ 			<argument>none</argument>
+          </arguments>
+        </configuration>
+      </plugin>			
+	<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+                            <warSourceExcludes>**/*.js,**/*.css
+                            </warSourceExcludes>                        
+          <webResources>
+            <resource>
+              <!-- this is relative to the pom.xml directory -->
+              <directory>target/requirejs/output</directory>
+			  <excludes>
+			    <exclude>**/jasmine*.*</exclude>
+			  </excludes>
+			  <includes>
+                <include>**/*.css</include>
+                <include>**/main.js</include>
+                <include>**/require.js</include>
+              </includes>
+              </resource>
+          </webResources>
+        </configuration>
+      </plugin>
         </plugins>
     </build>
 
@@ -55,25 +100,6 @@
             <id>integration</id>
             <build>
                 <plugins>
-<!--
-<plugin>  
-  <groupId>org.codehaus.mojo</groupId> 
-  <artifactId>exec-maven-plugin</artifactId> 
-  <version>1.1.1</version> 
-  <executions>
-    <execution>
-      <goals>
-        <id>build web resources</id>
-        <phase>
-        <goal>exec</goal> 
-      </goals>
-    </execution>
-  </executions>
-  <configuration>
-    <executable>hostname</executable> 
-  </configuration>
-</plugin>                    
--->
             <plugin>
                 <groupId>com.google.jstestdriver</groupId>
                 <artifactId>maven-jstestdriver-plugin</artifactId>
@@ -109,11 +135,11 @@
                     </execution>
                 </executions>
             </plugin>
-					<plugin>
+      <plugin>
                         <groupId>org.mortbay.jetty</groupId>
                         <artifactId>jetty-maven-plugin</artifactId>
                         <configuration>
-                            <webAppSourceDirectory>${basedir}/build</webAppSourceDirectory>
+                            <webAppSourceDirectory>${basedir}/target/${project.artifactId}</webAppSourceDirectory>
                         </configuration>
                         <executions>
                             <execution>

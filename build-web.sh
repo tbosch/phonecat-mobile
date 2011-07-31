@@ -5,20 +5,17 @@
 # Takes one parameter: either "test" or "prod"
 # Result of the build process is in the build directory.
 
-MODE=$1
+OPTIMIZE=$1
+IN=target/requirejs/input
+OUT=target/requirejs/output
 
-rm -fr tmp/*
-rm -fr build/*
-cp -r src/main/webapp/ tmp/
-if [ "$MODE" = "test" ]
-  then cp -r src/test/webapp/ tmp/
-fi
+mkdir -p $IN
+mkdir -p $OUT
+rm -fr $IN/*
+rm -fr $OUT/*
+cp -r src/main/webapp/ $IN
+cp -r src/test/webapp/ $IN
 
-if [ "$MODE" = "test" ]
-  then node r.js -o build-web.test.js;
-  else node r.js -o build-web.prod.js;
-fi
-
-rm -fr tmp/*
-find build -name "*.js" ! -name 'main*.js' ! -name 'require.js' -exec rm "{}" ";"
+node r.js -o build-web.cfg.js optimize=$OPTIMIZE
+rm -fr $IN
 

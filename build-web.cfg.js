@@ -1,8 +1,7 @@
 ({
-    appDir: "tmp",
+    appDir: "target/requirejs/input",
     baseUrl: ".",
-    dir: "build",
-    optimize: "none",
+    dir: "target/requirejs/output",
     modules: [
         {
             name: "main"
