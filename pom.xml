@@ -9,8 +9,9 @@
 
     <properties>
         <browser>/Applications/Google Chrome.app/Contents/MacOS/Google Chrome</browser>
-        <requirejs.optimize>uglify</requirejs.optimize>
-        <!--<requirejs.optimize>none</requirejs.optimize>-->
+        <!--<requirejs.optimize>closure</requirejs.optimize>-->
+        <!--<requirejs.optimize>uglify</requirejs.optimize>-->
+        <requirejs.optimize>none</requirejs.optimize>
     </properties>
 
     <build>
@@ -46,9 +47,9 @@
                 </executions>
                 <configuration>
                     <executable>sh</executable>
-                    <workingDirectory>${basedir}</workingDirectory>
+                    <workingDirectory>${basedir}/rjs-build</workingDirectory>
                     <arguments>
-                        <argument>build-web.sh</argument>
+                        <argument>rjs-build.sh</argument>
                         <argument>${requirejs.optimize}</argument>
                     </arguments>
                 </configuration>
