@@ -9,31 +9,18 @@
 
     <title>Jasmine Test Runner</title>
 
-    <link rel="stylesheet" href="lib/jasmine.css"/>
-
-    <script type="text/javascript" src="lib/jasmine.js"></script>
-    <script type="text/javascript" src="lib/jasmine-html.js"></script>
+    <link rel="stylesheet" href="lib/impl/jasmine.css"/>
 
 <!-- #################################################################################################
      #### ADD YOUR LIBS AND SPECS HERE ###############################################################
      ################################################################################################# -->
 
-    <!-- include lib files here... -->
-    <script type="text/javascript" src="lib/jasmine-ui.js"></script>
-    <script type="text/javascript" src="lib/jquery-1.6.1.js"></script>
-    <script type="text/javascript" src="lib/testutils.js"></script>
-
     <!-- include spec files here... -->
-    <script type="text/javascript" src="ui/phonelistSpec.js"></script>
+    <script src="lib/require.js" data-main="main-ui-html"></script>
 
 <!-- ################################################################################################# -->
 
 </head>
 <body>
-<!-- execute jasmine tests -->
-<script type="text/javascript">
-    jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-    jasmine.getEnv().execute();
-</script>
 </body>
 </html>

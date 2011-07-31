@@ -1,8 +1,10 @@
-angular.service('ocxhr', function(updateView) {
-    function ocxhr(url, options) {
-        var res = $.ajax(url, options);
-        res.always(updateView);
+define(["lib/jqm-ng", "lib/jquery"], function(jqmng, jquery) {
+
+    function xhr(url, options) {
+        var res = jquery.ajax(url, options);
+        res.always(jqmng.updateView);
         return res;
     }
-    return ocxhr;
-}, {$inject: ['$updateView']});
+
+    return {xhr: xhr};
+});
