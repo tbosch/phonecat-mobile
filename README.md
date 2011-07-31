@@ -6,6 +6,18 @@ Description
 
 Mobile version of Angulars sample application [phonecat](https://github.com/angular/angular-phonecat).
 
+Technologies
+------------
+
+- jquery-mobile: Mobile Widgets
+- angular: Databinding
+- jasmine: Unit-Tests
+- jasmine-ui: Ui-Tests
+- js-test-driver: Automating Tests
+- requirejs: Modules and optimization
+- Maven: Overall build control
+
+
 Live Versions
 -------------
 

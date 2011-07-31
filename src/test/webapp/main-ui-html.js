@@ -1,6 +1,7 @@
 require([
     "lib/jasmine-html",
-    "ui/phonelistSpec"
+    "ui/phonelistSpec",
+    "ui/phonedetailSpec"
 ]);
 
 
