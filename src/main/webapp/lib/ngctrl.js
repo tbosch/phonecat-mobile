@@ -1,36 +1,18 @@
 /**
  * require.js module that published a controller so that angular can use it.
+ * The controller needs to return an object with name/function mappings,
+ * this can also contain more than one controller.
  */
 define({
-
     load: function (name, req, load, config) {
-        function getNameWithoutPath(name) {
-            var lastSlashPos = name.lastIndexOf('/');
-            return name.substring(lastSlashPos + 1);
-        };
-
         req(["lib/angular", name], function(angular,ctrl) {
+            // Note: The window is not available during the build!
             if (typeof window != "undefined") {
-                var ctrlName = getNameWithoutPath(name);
-                window[ctrlName] = ctrl;
+                for (var ctrlName in ctrl) {
+                    window[ctrlName] = ctrl[ctrlName];
+                }
             }
             load(ctrl);
         });
-    },
-    write: function (pluginName, moduleName, write) {
-        var module = function(ctrl, name) {
-            function getNameWithoutPath(name) {
-                var lastSlashPos = name.lastIndexOf('/');
-                return name.substring(lastSlashPos + 1);
-            };
-            var ctrlName = getNameWithoutPath(name);
-            window[ctrlName] = ctrl;
-            return ctrl;
-        };
-        // Don't know why we need the trailing semi-colon. But without this,
-        // we get an error during requirejs optimization. Seems to be a bug
-        // in require.js
-        write(";define('" + pluginName + "!" + moduleName  +
-              "',['"+moduleName+"'], function(ctrl) { return ("+module.toString()+"(ctrl, '"+moduleName+"'));});\n");
     }
 });

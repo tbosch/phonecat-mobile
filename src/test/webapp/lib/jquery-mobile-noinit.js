@@ -1,16 +1,3 @@
-define(['lib/jquery'], function() {
-    /*
-     * Helper library to prevent the auto initialization of jquery.
-     * Needed for unit tests.
-     */
-    $(document).bind("mobileinit", function() {
-        $.extend($.mobile, {
-            gradeA: function() {
-                return false;
-            },
-            pageLoading: function() {
-            }
-        });
-    });
+define(['lib/global!lib/impl/jquery-mobile-noinit:lib/jquery'], function() {
 
 });

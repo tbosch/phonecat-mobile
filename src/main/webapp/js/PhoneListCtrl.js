@@ -20,6 +20,6 @@ define(["js/phoneService"], function(phoneService) {
         return angular.Array.paged(this.phones, search, sort);
     }
 
-    return PhoneListCtrl;
+    return {PhoneListCtrl: PhoneListCtrl};
 });
 

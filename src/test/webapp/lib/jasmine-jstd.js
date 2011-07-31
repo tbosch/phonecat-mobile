@@ -1,0 +1,1 @@
+define(['lib/global!lib/impl/jasmine-jstd-async-adapter:lib/jasmine,lib/jquery']);

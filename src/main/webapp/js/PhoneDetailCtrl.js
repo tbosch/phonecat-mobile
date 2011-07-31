@@ -12,5 +12,5 @@ define(["js/phoneService"], function(phoneService) {
         }
     }
 
-    return PhoneDetailCtrl;
+    return {PhoneDetailCtrl: PhoneDetailCtrl};
 });

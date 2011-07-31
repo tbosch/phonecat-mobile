@@ -4,7 +4,7 @@
     dir: "build",
     modules: [
         {
-            name: "main-unit"
+            name: "main"
         }
     ]
 })
