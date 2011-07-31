@@ -4,9 +4,9 @@ if $M2_HOME/bin/mvn package; then
     if git checkout gh-pages; then
       rm -fr *
       cp -r target/requirejs/output/ .
-      git add .
-      git commit -m "updated pages"
-      git checkout master
+      #git add .
+      #git commit -m "updated pages"
+      #git checkout master
     fi
 fi
 
