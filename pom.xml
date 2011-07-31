@@ -9,6 +9,8 @@
 
     <properties>
         <browser>/Applications/Google Chrome.app/Contents/MacOS/Google Chrome</browser>
+        <requirejs.optimize>uglify</requirejs.optimize>
+        <!--<requirejs.optimize>none</requirejs.optimize>-->
     </properties>
 
     <build>
@@ -27,56 +29,58 @@
                     </webAppConfig>
                 </configuration>
             </plugin>
-	<plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.1</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <executable>sh</executable>
-          <workingDirectory>${basedir}</workingDirectory>
-          <arguments>
-            <argument>build-web.sh</argument>
- 			<!-- TODO make this configurable! (optimization level) -->
- 			<argument>none</argument>
-          </arguments>
-        </configuration>
-      </plugin>			
-	<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.1.1</version>
-        <configuration>
-                            <warSourceExcludes>**/*.js,**/*.css
-                            </warSourceExcludes>                        
-          <webResources>
-            <resource>
-              <!-- this is relative to the pom.xml directory -->
-              <directory>target/requirejs/output</directory>
-			  <excludes>
-			    <exclude>**/jasmine*.*</exclude>
-			  </excludes>
-			  <includes>
-                <include>**/*.css</include>
-                <include>**/main.js</include>
-                <include>**/require.js</include>
-              </includes>
-              </resource>
-          </webResources>
-        </configuration>
-      </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <!-- Note: We are not using an earlier phase like compile, ...
+                  here as the jetty plugin spawns a second maven lifecylce,
+                  which also executes those early phases. -->
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>sh</executable>
+                    <workingDirectory>${basedir}</workingDirectory>
+                    <arguments>
+                        <argument>build-web.sh</argument>
+                        <argument>${requirejs.optimize}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <warSourceExcludes>**/*.js,**/*.css
+                    </warSourceExcludes>
+                    <webResources>
+                        <resource>
+                            <directory>target/requirejs/output</directory>
+                            <excludes>
+                                <exclude>**/jasmine*.*</exclude>
+                            </excludes>
+                            <includes>
+                                <include>**/*.css</include>
+                                <include>**/main.js</include>
+                                <include>**/require.js</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
+            <!-- Profile for normal development directly using the sources -->
             <id>dev</id>
             <build>
                 <plugins>
@@ -97,45 +101,46 @@
 
         </profile>
         <profile>
+            <!-- Profile for executing the integration tests, e.g. jstestdriver, ... -->
             <id>integration</id>
             <build>
                 <plugins>
-            <plugin>
-                <groupId>com.google.jstestdriver</groupId>
-                <artifactId>maven-jstestdriver-plugin</artifactId>
-                <version>1.3.2.2</version>
-                <configuration>
-                    <browser>${browser}</browser>
-                    <port>9876</port>
-                    <reset>true</reset>
-                    <runnerMode>INFO</runnerMode>
-                    <testOutput>${project.build.directory}/jstd-reports</testOutput>
-                    <tests>all</tests>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>run-unit-tests</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
+                    <plugin>
+                        <groupId>com.google.jstestdriver</groupId>
+                        <artifactId>maven-jstestdriver-plugin</artifactId>
+                        <version>1.3.2.2</version>
                         <configuration>
-                            <config>jstd-unit.conf</config>
+                            <browser>${browser}</browser>
+                            <port>9876</port>
+                            <reset>true</reset>
+                            <runnerMode>INFO</runnerMode>
+                            <testOutput>${project.build.directory}/jstd-reports</testOutput>
+                            <tests>all</tests>
                         </configuration>
-                    </execution>
-                    <execution>
-                        <id>run-integration-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <config>jstd-ui.conf</config>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-      <plugin>
+                        <executions>
+                            <execution>
+                                <id>run-unit-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <config>jstd-unit.conf</config>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>run-integration-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <config>jstd-ui.conf</config>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.mortbay.jetty</groupId>
                         <artifactId>jetty-maven-plugin</artifactId>
                         <configuration>
