@@ -11,9 +11,9 @@ if $M2_HOME/bin/mvn package; then
       rm -fr *
       cp -r $TMP/ .
       rmdir -fr $TMP
-      #git add .
-      #git commit -m "updated pages"
-      #git checkout master
+      git add .
+      git commit -a -m "updated pages"
+      git checkout master
     fi
 fi
 
