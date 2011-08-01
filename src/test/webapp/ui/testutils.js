@@ -1,7 +1,7 @@
 define(['lib/jasmine-ui'], function() {
 
     function getCurrentPage() {
-        return testframe().$.mobile.activePage;
+        return testwindow().$.mobile.activePage;
     }
 
     /**

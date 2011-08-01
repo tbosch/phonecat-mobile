@@ -6,7 +6,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
                 testutils.setOnActivateArguments(testwin.PhoneDetailCtrl, {selectedPhone: {id:10}});
             });
             runs(function() {
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var page = testutils.getCurrentPage();
                 var name = page.find('.phonename');
                 expect($.trim(name.text())).toEqual(testData.onePhoneDetail.name);

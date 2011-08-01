@@ -18,7 +18,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             });
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone');
                 for (var i = 0; i < listEntries.length; i++) {
                     var li = $(listEntries[i]);
@@ -41,7 +41,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone');
                 for (var i = 0; i < listEntries.length; i++) {
                     var li = $(listEntries[i]);
@@ -56,7 +56,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone');
                 for (var i = 0; i < listEntries.length; i++) {
                     var li = $(listEntries[i]);
@@ -73,7 +73,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(testData.twoPhones.length);
                 var filterText = page.find('.search');
@@ -84,7 +84,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(1);
                 var text = $.trim(listEntries.text());
@@ -99,7 +99,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(10);
                 var loadNextButton = page.find('.loadNext');
@@ -109,7 +109,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(testData.manyPhones.length);
                 var loadNextButton = page.find('.loadNext');
@@ -125,7 +125,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             });
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 var listEntries = page.find('li.phone a');
                 var entry = $(listEntries[0]);
                 entry.trigger('vclick');
@@ -133,7 +133,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
-                var $ = testframe().$;
+                var $ = testwindow().$;
                 expect(page.attr('id')).toEqual('phonedetail');
                 var text = $.trim(page.find('h1').text());
                 expect(text).toEqual(testData.onePhone[0].name);
