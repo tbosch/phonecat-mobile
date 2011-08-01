@@ -11855,7 +11855,7 @@ jasmine.ui = {};
  * The central logging function.
  */
 jasmine.ui.log = function(msg) {
-    //console.log(msg);
+    console.log(msg);
 };
 
 
@@ -11942,6 +11942,12 @@ jasmine.ui.log = function(msg) {
         for (var name in handlers) {
             if (handlers[name]()) {
                 jasmine.ui.log("async waiting for " + name);
+                return true;
+            }
+        }
+        if (fr.jQuery) {
+            if (!fr.jQuery.isReady) {
+                jasmine.ui.log("async waiting for jquery ready");
                 return true;
             }
         }
@@ -12046,6 +12052,9 @@ jasmine.ui.log = function(msg) {
         // as it would proceed directly if there already was
         // a frame loaded.
         waitsForReload();
+        spec.runs(function() {
+            jasmine.ui.log("Successfully loaded url " + url);
+        });
     }
 
     function callInstrumentListeners(fr) {
@@ -12103,7 +12112,6 @@ jasmine.ui.log = function(msg) {
             if (!win.loadHtmlReady) {
                 win.loadHtmlReady = true;
                 callListeners();
-                jasmine.ui.log("Successfully loaded frame " + fr.name + " with url " + fr.location.href);
             }
         }
 
@@ -12128,6 +12136,18 @@ jasmine.ui.log = function(msg) {
             win.attachEvent("onload", loadCallback);
         }
     }
+    /*
+     * When using require.js, and all libs are in one file,
+     * we might not be able to intercept the point in time
+     * when everything is loaded, but the ready signal was not yet sent.
+     */
+    function addRequireJsSupport(fr) {
+        fr.require = {
+          ready: function() {
+              callInstrumentListeners(fr);
+          }
+        };
+    }
 
     window.instrument = function(fr) {
         try {
@@ -12143,6 +12163,8 @@ jasmine.ui.log = function(msg) {
             });
             addLoadEventListener(fr);
             callInstrumentListeners(fr);
+            addRequireJsSupport(fr);
+
         } catch (ex) {
             fr.loadHtmlError = ex;
         }
