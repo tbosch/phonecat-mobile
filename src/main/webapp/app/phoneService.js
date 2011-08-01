@@ -1,4 +1,4 @@
-define(["js/ocxhr"], function(xhr) {
+define(["app/ocxhr"], function(xhr) {
 
     function phones() {
         return xhr.xhr('phones/phones.json', {dataType:"json"});

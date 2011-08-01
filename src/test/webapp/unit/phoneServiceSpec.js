@@ -1,4 +1,4 @@
-define(['lib/jasmine', 'lib/jquery', 'js/ocxhr', 'js/phoneService'], function(jasmine, $, ocxhr, service) {
+define(['lib/jasmine', 'lib/jquery', 'app/ocxhr', 'app/phoneService'], function(jasmine, $, ocxhr, service) {
     describe('phoneService', function() {
         var mockXhr;
         beforeEach(function() {

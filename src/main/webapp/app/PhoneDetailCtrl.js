@@ -1,4 +1,4 @@
-define(["js/phoneService"], function(phoneService) {
+define(["app/phoneService"], function(phoneService) {
 
     function PhoneDetailCtrl() {
     }

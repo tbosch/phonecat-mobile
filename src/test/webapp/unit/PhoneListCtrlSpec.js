@@ -2,8 +2,8 @@ define([
     'phonesTestData',
     'lib/jasmine',
     'lib/jquery',
-    'js/phoneService',
-    'js/PhoneListCtrl'], function(testData, jasmine, $, phoneService, PhoneListCtrl) {
+    'app/phoneService',
+    'app/PhoneListCtrl'], function(testData, jasmine, $, phoneService, PhoneListCtrl) {
     describe('PhoneListCtrl', function() {
         var phonesSpy, phoneSpy;
         beforeEach(function() {

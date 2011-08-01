@@ -1,3 +1,3 @@
-define(['lib/global!lib/impl/jquery-mobile-noinit:lib/jquery'], function() {
+define(['plugin/global!lib/impl/jquery-mobile-noinit:lib/jquery'], function() {
 
 });

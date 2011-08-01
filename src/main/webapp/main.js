@@ -2,7 +2,7 @@
  * Configuration for require.js
  */
 require([
-    "lib/ngctrl!js/PhoneListCtrl",
-    "lib/ngctrl!js/PhoneDetailCtrl",
+    "plugin/ngctrl!app/PhoneListCtrl",
+    "plugin/ngctrl!app/PhoneDetailCtrl",
     "lib/jqm-ng"
 ]);
