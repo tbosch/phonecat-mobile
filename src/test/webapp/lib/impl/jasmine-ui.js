@@ -345,6 +345,10 @@ jasmine.ui.log = function(msg) {
         return window.waitsForAsync();
     };
 
+    jasmine.ui.addAsyncWaitHandler(null, 'unload', function() {
+        return inReload;
+    });
+
     jasmine.ui.addLoadHtmlListener('instrumentBeforeUnload', function(window) {
         inReload = false;
         if (window.addEventListener) {
@@ -356,9 +360,6 @@ jasmine.ui.log = function(msg) {
                 inReload = true;
             });
         }
-        jasmine.ui.addAsyncWaitHandler(null, 'unload', function() {
-            return inReload;
-        });
     });
 })();
 
