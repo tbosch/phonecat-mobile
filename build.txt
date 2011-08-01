@@ -1,16 +1,16 @@
 
 main.js
 ----------------
-lib/ngctrl.js
-lib/global.js
+plugin/ngctrl.js
+plugin/global.js
 lib/impl/jquery-1.6.1.js
 lib/jquery.js
 lib/impl/angular-0.9.15.js
 lib/angular.js
-js/ocxhr.js
-js/phoneService.js
-js/PhoneListCtrl.js
-js/PhoneDetailCtrl.js
+app/ocxhr.js
+app/phoneService.js
+app/PhoneListCtrl.js
+app/PhoneDetailCtrl.js
 lib/impl/jquery.mobile-1.0b1-oc2.js
 lib/jquery-mobile.js
 lib/impl/jquery-mobile-angular-adapter.js
@@ -19,7 +19,7 @@ main.js
 
 main-unit-html.js
 ----------------
-lib/global.js
+plugin/global.js
 lib/impl/jquery-1.6.1.js
 lib/jquery.js
 lib/impl/jquery-mobile-noinit.js
@@ -34,20 +34,20 @@ lib/impl/angular-0.9.15.js
 lib/angular.js
 lib/impl/jquery-mobile-angular-adapter.js
 lib/jqm-ng.js
-js/ocxhr.js
+app/ocxhr.js
 unit/ocxhrSpec.js
-js/phoneService.js
+app/phoneService.js
 unit/phoneServiceSpec.js
 phonesTestData.js
-js/PhoneListCtrl.js
+app/PhoneListCtrl.js
 unit/PhoneListCtrlSpec.js
-js/PhoneDetailCtrl.js
+app/PhoneDetailCtrl.js
 unit/PhoneDetailCtrlSpec.js
 main-unit-html.js
 
 main-unit-jstd.js
 ----------------
-lib/global.js
+plugin/global.js
 lib/impl/jquery-1.6.1.js
 lib/jquery.js
 lib/impl/jquery-mobile-noinit.js
@@ -62,20 +62,20 @@ lib/impl/angular-0.9.15.js
 lib/angular.js
 lib/impl/jquery-mobile-angular-adapter.js
 lib/jqm-ng.js
-js/ocxhr.js
+app/ocxhr.js
 unit/ocxhrSpec.js
-js/phoneService.js
+app/phoneService.js
 unit/phoneServiceSpec.js
 phonesTestData.js
-js/PhoneListCtrl.js
+app/PhoneListCtrl.js
 unit/PhoneListCtrlSpec.js
-js/PhoneDetailCtrl.js
+app/PhoneDetailCtrl.js
 unit/PhoneDetailCtrlSpec.js
 main-unit-jstd.js
 
 main-ui-html.js
 ----------------
-lib/global.js
+plugin/global.js
 lib/impl/jasmine.js
 lib/jasmine.js
 lib/impl/jquery-1.6.1.js
@@ -92,7 +92,7 @@ main-ui-html.js
 
 main-ui-jstd.js
 ----------------
-lib/global.js
+plugin/global.js
 lib/impl/jasmine.js
 lib/jasmine.js
 lib/impl/jquery-1.6.1.js
