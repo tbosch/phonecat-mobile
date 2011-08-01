@@ -11945,15 +11945,6 @@ jasmine.ui.log = function(msg) {
                 return true;
             }
         }
-        // If the testframe contains jquery, and jquery is not yet ready, continue to wait.
-        // This is useful for js libraries that do things after page load.
-        if (fr.$) {
-            if (!fr.$.isReady) {
-                jasmine.ui.log("async waiting for jquery ready");
-                return true;
-            }
-        }
-
         jasmine.ui.log("end waiting for async");
         return false;
     };
@@ -12180,6 +12171,10 @@ jasmine.ui.log = function(msg) {
         return window.waitsForAsync();
     };
 
+    jasmine.ui.addAsyncWaitHandler(null, 'unload', function() {
+        return inReload;
+    });
+
     jasmine.ui.addLoadHtmlListener('instrumentBeforeUnload', function(window) {
         inReload = false;
         if (window.addEventListener) {
@@ -12191,9 +12186,6 @@ jasmine.ui.log = function(msg) {
                 inReload = true;
             });
         }
-        jasmine.ui.addAsyncWaitHandler(null, 'unload', function() {
-            return inReload;
-        });
     });
 })();
 
