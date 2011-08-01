@@ -7,7 +7,8 @@ if $M2_HOME/bin/mvn package; then
     rm -fr $TMP
     cp -r $SRC/ $TMP
 	find $TMP -name "*.js" ! -name "main*.js" ! -name "require.js" -exec rm "{}" ";"    
-    find $TMP -depth -type d -empty -exec rmdir "{}" ";"	
+    find $TMP -depth -type d -empty -exec rmdir "{}" ";"
+    git stash
     if git checkout gh-pages; then
       rm -fr *
       cp -r $TMP/ .
@@ -15,5 +16,6 @@ if $M2_HOME/bin/mvn package; then
       git commit -a -m "updated pages"
       git checkout master
     fi
+    git stash pop
 fi
 
