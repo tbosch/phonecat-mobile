@@ -11,7 +11,7 @@
         <browser>/Applications/Google Chrome.app/Contents/MacOS/Google Chrome</browser>
         <!--<requirejs.optimize>closure</requirejs.optimize>-->
         <!--<requirejs.optimize>uglify</requirejs.optimize>-->
-        <requirejs.optimize>none</requirejs.optimize>
+        <requirejs.optimize>uglify</requirejs.optimize>
     </properties>
 
     <build>
@@ -68,6 +68,9 @@
                                 <exclude>**/jasmine*.*</exclude>
                             </excludes>
                             <includes>
+                                <!-- To also include the test files in the result, uncomment this
+                                <include>**/*</include>
+                                -->
                                 <include>**/*.css</include>
                                 <include>**/main.js</include>
                                 <include>**/require.js</include>

@@ -366,7 +366,7 @@ jasmine.ui.log = function(msg) {
  * Adds some helper functions into the created frame and the current window.
  */
 (function() {
-    function addHelperFunctions(window) {
+    var addHelperFunctions = function(window) {
         /**
          * Instantiates the given function with the given arguments.
          * Needed because IE throws an error if an object is instantiated
@@ -411,7 +411,7 @@ jasmine.ui.log = function(msg) {
     }
 
     jasmine.ui.addLoadHtmlListener('addHelperFunctions', function(window) {
-        window.document.write("<script>" + addHelperFunctions.toString() + ";addHelperFunctions(window);</script>");
+        window.document.write("<script>(" + addHelperFunctions.toString() + ")(window);</script>");
     });
 
     addHelperFunctions(window);
