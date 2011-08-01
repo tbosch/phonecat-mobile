@@ -11,7 +11,7 @@
         <browser>/Applications/Google Chrome.app/Contents/MacOS/Google Chrome</browser>
         <!--<requirejs.optimize>closure</requirejs.optimize>-->
         <!--<requirejs.optimize>uglify</requirejs.optimize>-->
-        <requirejs.optimize>uglify</requirejs.optimize>
+        <requirejs.optimize>none</requirejs.optimize>
     </properties>
 
     <build>
