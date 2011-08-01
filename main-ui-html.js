@@ -11945,6 +11945,15 @@ jasmine.ui.log = function(msg) {
                 return true;
             }
         }
+        // If the testframe contains jquery, and jquery is not yet ready, continue to wait.
+        // This is useful for js libraries that do things after page load.
+        if (fr.$) {
+            if (!fr.$.isReady) {
+                jasmine.ui.log("async waiting for jquery ready");
+                return true;
+            }
+        }
+
         jasmine.ui.log("end waiting for async");
         return false;
     };
