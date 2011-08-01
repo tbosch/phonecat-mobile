@@ -1,14 +1,10 @@
 define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], function(testData, testutils, jasmine) {
 
     describe('phonelist', function() {
-        var jqueryLoaded = function(window) {
-            return !!window.$;
-        };
-
         it('should show expected number of phones in a list', function() {
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
                 testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
-            }, jqueryLoaded);
+            });
             runs(function() {
                 var page = testutils.getCurrentPage();
                 var listEntries = page.find('li.phone');
@@ -19,7 +15,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
         it('should show the names of the phones in a list', function() {
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
                 testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
-            }, jqueryLoaded);
+            });
             runs(function() {
                 var page = testutils.getCurrentPage();
                 var $ = testframe().$;
@@ -35,7 +31,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
         it('should sort by name when the sort buttons are clicked', function() {
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
                 testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
-            }, jqueryLoaded);
+            });
             runs(function() {
                 var page = testutils.getCurrentPage();
                 var sortButtons = page.find('.sortUp');
@@ -73,7 +69,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
         it('should filter when a value is put into the search field', function() {
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
                 testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
-            }, jqueryLoaded);
+            });
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
@@ -99,7 +95,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
         it('should page with a pagesize of 10', function() {
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
                 testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.manyPhones);
-            }, jqueryLoaded);
+            });
             waitsForAsync();
             runs(function() {
                 var page = testutils.getCurrentPage();
@@ -126,7 +122,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
                 testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.onePhone);
                 testutils.addXhrMock(testwin, 'phones/motorola-xoom-with-wi-fi.json', true, testData.onePhoneDetail);
-            }, jqueryLoaded);
+            });
             runs(function() {
                 var page = testutils.getCurrentPage();
                 var $ = testframe().$;

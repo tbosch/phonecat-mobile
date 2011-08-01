@@ -29,7 +29,7 @@ jasmine.ui = {};
  * The central logging function.
  */
 jasmine.ui.log = function(msg) {
-    console.log(msg);
+    // console.log(msg);
 };
 
 
@@ -164,17 +164,11 @@ jasmine.ui.log = function(msg) {
      * Adds a listener to the instrumentation done by #loadHtml. All listeners
      * will be called when a frame is loaded.
      * @param name
-     * @param listener A function with the signature fn(window).
-     * @param callbackCondition Condition when to call the callback. This will be checked
-     * at the following points in time: document init, dom loaded, fully loaded.
-     *
-     * Note that the callback will always be called BEFORE any other event listeners,
-     * so it is able to still mock things out!
-     *
-     * Note that every listener will only be called once.
+     * @param listener A function with the signature fn(window, callTime) where callTime is either
+     * "beforeContent" or "afterContent".
      */
-    jasmine.ui.addLoadHtmlListener = function(name, listener, condition) {
-        instrumentListeners[name] = {listener: listener, condition: condition };
+    jasmine.ui.addLoadHtmlListener = function(name, listener) {
+        instrumentListeners[name] = listener;
     }
 
     var customListenerId = 0;
@@ -184,17 +178,19 @@ jasmine.ui.log = function(msg) {
      * @param name
      * @param listener
      */
-    jasmine.ui.addLoadHtmlListenerForNextLoad = function(name, listener, condition) {
+    jasmine.ui.addLoadHtmlListenerForNextLoad = function(name, callTime, listener) {
         name = name + (customListenerId++);
-        jasmine.ui.addLoadHtmlListener(name, function(window) {
-            window.setTimeout(function() {
-                delete instrumentListeners[name];
-            }, 0);
-            listener(window);
-        }, condition);
+        jasmine.ui.addLoadHtmlListener(name, function(window, pcallTime) {
+            if (callTime == pcallTime) {
+                window.setTimeout(function() {
+                    delete instrumentListeners[name];
+                }, 0);
+                listener(window);
+            }
+        });
     }
 
-    window.loadHtml = function(url, instrumentCallback, instrumentCondition) {
+    window.loadHtml = function(url, instrumentCallback) {
         jasmine.getEnv().currentSpec.loadHtml.apply(jasmine.getEnv().currentSpec,
             arguments);
     };
@@ -205,19 +201,12 @@ jasmine.ui.log = function(msg) {
      * until the page is fully loaded.
      * @param url
      * @param instrumentCallback
-     * @param callbackCondition Condition when to call the callback. This will be checked
-     * at the following points in time: document init, dom loaded, fully loaded.
-     *
-     * Note that the callback will always be called BEFORE any other event listeners,
-     * so it is able to still mock things out!
-
-     * Note that every listener will only be called once.
      */
-    jasmine.Spec.prototype.loadHtml = function(url, instrumentCallback, callbackCondition) {
+    jasmine.Spec.prototype.loadHtml = function(url, instrumentCallback) {
         var spec = this;
         spec.runs(function() {
             if (instrumentCallback) {
-                jasmine.ui.addLoadHtmlListenerForNextLoad('loadHtmlCallback', instrumentCallback, callbackCondition);
+                jasmine.ui.addLoadHtmlListenerForNextLoad('loadHtmlCallback', 'afterContent', instrumentCallback);
             }
             testframe(url);
         });
@@ -231,18 +220,11 @@ jasmine.ui.log = function(msg) {
         });
     }
 
-    function callInstrumentListeners(fr) {
-        jasmine.ui.log('instrumenting ' + fr.name);
+    function callInstrumentListeners(fr, callTime) {
+        jasmine.ui.log('instrumenting ' + fr.name + " " + callTime);
         for (var name in instrumentListeners) {
-            var entry = instrumentListeners[name];
-            fr.calledInstrumentListeners = fr.calledInstrumentListeners || {};
-            if (!(name in fr.calledInstrumentListeners)) {
-                if (!entry.condition || entry.condition(fr)) {
-                    jasmine.ui.log('calling instrument listener '+name);
-                    fr.calledInstrumentListeners[name] = true;
-                    entry.listener(testframe());
-                }
-            }
+            var fn = instrumentListeners[name];
+            fn(testframe(), callTime);
         }
     }
 
@@ -279,7 +261,11 @@ jasmine.ui.log = function(msg) {
         var doc = fr.document;
 
         function callListeners() {
-            callInstrumentListeners(fr);
+            // Only use the load events when require-js is not used.
+            // Otherwise we use the ready-callback from require-js.
+            if (!fr.define) {
+                callInstrumentListeners(fr, 'afterContent');
+            }
         }
 
         function loadCallback() {
@@ -293,7 +279,7 @@ jasmine.ui.log = function(msg) {
         if (doc.addEventListener) {
             // Be sure that our handler gets called before any
             // other handler of the instrumented page!
-            proxyAddEventFunction(doc, 'addEventListener', {'DOMContentLoaded': callListeners});
+            proxyAddEventFunction(doc, 'addEventListener', {'DOMContentLoaded': loadCallback});
             proxyAddEventFunction(win, 'addEventListener', {'load': loadCallback});
 
             // A fallback to window.onload, that will always work
@@ -303,7 +289,7 @@ jasmine.ui.log = function(msg) {
         } else if (doc.attachEvent) {
             // Be sure that our handler gets called before any
             // other handler of the instrumented page!
-            proxyAddEventFunction(doc, 'attachEvent', {'onreadystatechange': callListeners});
+            proxyAddEventFunction(doc, 'attachEvent', {'onreadystatechange': loadCallback});
             proxyAddEventFunction(win, 'attachEvent', {'load': loadCallback});
 
             // A fallback to window.onload, that will always work
@@ -318,7 +304,7 @@ jasmine.ui.log = function(msg) {
     function addRequireJsSupport(fr) {
         fr.require = {
           ready: function() {
-              callInstrumentListeners(fr);
+              callInstrumentListeners(fr, 'afterContent');
           }
         };
     }
@@ -335,8 +321,8 @@ jasmine.ui.log = function(msg) {
                 }
                 return !fr.loadHtmlReady;
             });
+            callInstrumentListeners(fr, 'beforeContent');
             addLoadEventListener(fr);
-            callInstrumentListeners(fr);
             addRequireJsSupport(fr);
 
         } catch (ex) {
@@ -364,14 +350,17 @@ jasmine.ui.log = function(msg) {
         window.runs(function() {
             inReload = true;
         });
-        return window.waitsForAsync();
+        return window.waitsForAsync(10000);
     };
 
     jasmine.ui.addAsyncWaitHandler(null, 'unload', function() {
         return inReload;
     });
 
-    jasmine.ui.addLoadHtmlListener('instrumentBeforeUnload', function(window) {
+    jasmine.ui.addLoadHtmlListener('instrumentBeforeUnload', function(window, callTime) {
+        if (callTime != 'beforeContent') {
+            return;
+        }
         inReload = false;
         if (window.addEventListener) {
             window.addEventListener('unload', function() {
@@ -433,7 +422,10 @@ jasmine.ui.log = function(msg) {
         window.proxyConstructor = proxyConstructor;
     }
 
-    jasmine.ui.addLoadHtmlListener('addHelperFunctions', function(window) {
+    jasmine.ui.addLoadHtmlListener('addHelperFunctions', function(window, callTime) {
+        if (callTime != 'beforeContent') {
+            return;
+        }
         window.document.write("<script>(" + addHelperFunctions.toString() + ")(window);</script>");
     });
 
@@ -509,7 +501,10 @@ jasmine.ui.log = function(msg) {
  * Adds a loadHtmlListener that adds an async wait handler for the window.setTimeout function.
  */
 (function() {
-    jasmine.ui.addLoadHtmlListener('instrumentTimeout', function(window) {
+    jasmine.ui.addLoadHtmlListener('instrumentTimeout', function(window, callTime) {
+        if (callTime != 'beforeContent') {
+            return;
+        }
         var timeouts = {};
         // Note: Do NOT use function.apply here,
         // as sometimes the timeout method
@@ -557,7 +552,10 @@ jasmine.ui.log = function(msg) {
  * Adds a loadHtmlListener that adds an async wait handler for the window.setInterval function.
  */
 (function() {
-    jasmine.ui.addLoadHtmlListener('instrumentInterval', function(window) {
+    jasmine.ui.addLoadHtmlListener('instrumentInterval', function(window, callTime) {
+        if (callTime != 'beforeContent') {
+            return;
+        }
         var intervals = {};
         // Note: Do NOT use function.apply here,
         // as sometimes the interval method
@@ -606,7 +604,11 @@ jasmine.ui.log = function(msg) {
     var copyStateFields = ['readyState', 'responseText', 'responseXML', 'status', 'statusText'];
     var proxyMethods = ['abort','getAllResponseHeaders', 'getResponseHader', 'open', 'send', 'setRequestHeader'];
 
-    jasmine.ui.addLoadHtmlListener('instrumentXhr', function(window) {
+    jasmine.ui.addLoadHtmlListener('instrumentXhr', function(window, callTime) {
+        if (callTime != 'beforeContent') {
+            return null;
+        }
+
         var oldXHR = window.XMLHttpRequest;
         window.openCallCount = 0;
         var DONE = 4;
@@ -669,7 +671,13 @@ jasmine.ui.log = function(msg) {
  */
 (function() {
 
-    jasmine.ui.addLoadHtmlListener('instrumentAnimationEnd', function(window) {
+    jasmine.ui.addLoadHtmlListener('instrumentAnimationEnd', function(window, callTime) {
+        if (callTime != 'afterContent') {
+            return null;
+        }
+        if (!(window.$ && window.$.fn.animationComplete)) {
+            return;
+        }
         var oldFn = window.$.fn.animationComplete;
         window.animationCount = 0;
         window.$.fn.animationComplete = function(callback) {
@@ -682,9 +690,7 @@ jasmine.ui.log = function(msg) {
         jasmine.ui.addAsyncWaitHandler(window, 'WebkitAnimation',
             function() {
                 return window.animationCount != 0;
-        });
-    }, function(window) {
-        return window.$ && window.$.fn.animationComplete;
+            });
     });
 })();
 
@@ -695,7 +701,13 @@ jasmine.ui.log = function(msg) {
  * So be sure to always wait at least that time!
  */
 (function() {
-    jasmine.ui.addLoadHtmlListener('instrumentWebkitTransition', function(window) {
+    jasmine.ui.addLoadHtmlListener('instrumentWebkitTransition', function(window, callTime) {
+        if (callTime != 'afterContent') {
+            return null;
+        }
+        if (!(window.$ && window.$.fn.animationComplete)) {
+            return;
+        }
         window.transitionCount = 0;
 
         var oldFn = window.$.fn.transitionComplete;
@@ -711,8 +723,6 @@ jasmine.ui.log = function(msg) {
                 return window.transitionCount != 0;
             });
 
-    }, function(window) {
-        return window.$ && window.$.fn.transitionComplete;
     });
 })();
 

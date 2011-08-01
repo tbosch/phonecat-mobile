@@ -1,14 +1,10 @@
 define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], function(testData, testutils, jasmine) {
     describe('phonedetail', function() {
-        var jqueryLoaded = function(window) {
-            return !!window.$;
-        };
-
         it('should show the name, description and images of the phone with the id', function() {
             loadHtml('/phonecat-mobile/index.html#phonedetail', function(testwin) {
                 testutils.addXhrMock(testwin, 'phones/10.json', true, testData.onePhoneDetail);
                 testutils.setOnActivateArguments(testwin.PhoneDetailCtrl, {selectedPhone: {id:10}});
-            }, jqueryLoaded);
+            });
             runs(function() {
                 var $ = testframe().$;
                 var page = testutils.getCurrentPage();

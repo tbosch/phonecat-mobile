@@ -14,7 +14,7 @@ Technologies
 - jasmine: Unit-Tests
 - jasmine-ui: Ui-Tests
 - js-test-driver: Automating Tests
-- requirejs: Modules and optimization
+- requirejs / uglifyjs: Modules and optimization
 - Maven: Overall build control
 
 
