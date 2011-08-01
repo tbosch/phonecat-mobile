@@ -1,4 +1,4 @@
-define(['lib/jasmine', 'lib/jquery', 'lib/jqm-ng', 'app/ocxhr'], function(jasmine, $, jqmng, ocxhr) {
+define(['lib/jasmine', 'lib/jquery', 'lib/jqm-angular', 'app/ocxhr'], function(jasmine, $, jqmng, ocxhr) {
     describe('ocxhr', function() {
         var ajaxSpy, updateViewSpy;
         beforeEach(function() {

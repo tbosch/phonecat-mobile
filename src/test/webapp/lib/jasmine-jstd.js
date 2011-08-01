@@ -1,1 +1,1 @@
-define(['plugin/global!lib/impl/jasmine-jstd-async-adapter:lib/jasmine,lib/jquery']);
+define(['plugin/global!lib/impl/JasmineAdapter:lib/jasmine,lib/jquery']);

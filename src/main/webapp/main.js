@@ -4,5 +4,5 @@
 require([
     "plugin/ngctrl!app/PhoneListCtrl",
     "plugin/ngctrl!app/PhoneDetailCtrl",
-    "lib/jqm-ng"
+    "lib/jqm-angular"
 ]);
