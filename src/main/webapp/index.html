@@ -7,13 +7,13 @@
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
     <script>opener && opener.instrument && opener.instrument(window);</script>
-    <script data-main="main" src="lib/require.js"></script>
+    <script src="lib/require.js" data-main="main"></script>
 
     <link rel="stylesheet" href="lib/impl/jquery.mobile-1.0b1-oc2.css"/>
 
     <title>Google Phone Gallery</title>
 </head>
-<body>
+<body style="display: none">
 <div data-role="page" id="phonelist" ng:controller="PhoneListCtrl">
     <div data-role="header" data-backbtn="false">
         <h1>Phones</h1>
