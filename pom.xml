@@ -9,14 +9,73 @@
 
     <properties>
         <browser>/Applications/Google Chrome.app/Contents/MacOS/Google Chrome</browser>
-        <!--<requirejs.optimize>closure</requirejs.optimize>-->
-        <!--<requirejs.optimize>uglify</requirejs.optimize>-->
-        <requirejs.optimize>uglify</requirejs.optimize>
+        <!-- Values: uglify, closure, none -->
+        <jsOptimizer>uglify</jsOptimizer>
     </properties>
 
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <plugin>
+                <groupId>com.voltvoodoo</groupId>
+                <artifactId>brew</artifactId>
+                <version>0.2.2</version>
+                <configuration>
+                    <optimizeBuildDir>${basedir}/target/requirejs/build</optimizeBuildDir>
+                    <optimizeOutputDir>${basedir}/target/requirejs/optimized</optimizeOutputDir>
+                    <optimizedFileNameSuffix></optimizedFileNameSuffix>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>optimize-main</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>optimize</goal>
+                        </goals>
+                        <configuration>
+                            <optimizeSourceDir>${basedir}/src/main/webapp</optimizeSourceDir>
+                            <jsOptimizer>${jsOptimizer}</jsOptimizer>
+                            <modules>
+                                <module>
+                                    <name>main</name>
+                                </module>
+                            </modules>
+                        </configuration>
+                    </execution>
+
+                    <!-- This second execution relies on the fact that the first execution
+                         left the modules of src/main/webapp in the build directory -->
+                    <execution>
+                        <id>optimize-test</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>optimize</goal>
+                        </goals>
+                        <configuration>
+                            <optimizeSourceDir>${basedir}/src/test/webapp</optimizeSourceDir>
+                             <!--Tests don't need optimization. Furthermore, optimization here would
+                                 optimize the files from src/main/webapp a second time.-->
+                            <jsOptimizer>none</jsOptimizer>
+                            <modules>
+                                <module>
+                                    <name>main-ui-jstd</name>
+                                </module>
+                                <module>
+                                    <name>main-unit-jstd</name>
+                                </module>
+                                <!-- Only needed for debugging...
+                                <module>
+                                    <name>main-unit-html</name>
+                                </module>
+                                <module>
+                                    <name>main-ui-html</name>
+                                </module>
+                                -->
+                            </modules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
@@ -31,30 +90,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <!-- Note: We are not using an earlier phase like compile, ...
-                  here as the jetty plugin spawns a second maven lifecylce,
-                  which also executes those early phases. -->
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>sh</executable>
-                    <workingDirectory>${basedir}/rjs-build</workingDirectory>
-                    <arguments>
-                        <argument>rjs-build.sh</argument>
-                        <argument>${requirejs.optimize}</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
@@ -63,14 +98,14 @@
                     </warSourceExcludes>
                     <webResources>
                         <resource>
-                            <directory>target/requirejs/output</directory>
+                            <directory>target/requirejs/build</directory>
                             <excludes>
+                                <!-- To also include the test files in the result, comment this out-->
                                 <exclude>**/jasmine*.*</exclude>
                             </excludes>
                             <includes>
-                                <!-- To also include the test files in the result, uncomment this
-                                <include>**/*</include>
-                                -->
+                                <!-- To also include the test files in the result, uncomment this-->
+                                <!--include>**/*</include-->
                                 <include>**/*.css</include>
                                 <include>**/main.js</include>
                                 <include>**/require.js</include>

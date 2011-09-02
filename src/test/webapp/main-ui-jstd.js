@@ -1,5 +1,5 @@
 require([
-    "lib/jasmine-jstd",
+    "lib/ui-jstd-externals",
     "ui/phonelistSpec",
     "ui/phonedetailSpec"
 ]);

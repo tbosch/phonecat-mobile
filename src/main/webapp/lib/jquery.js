@@ -1,3 +1,3 @@
-define(['plugin/global!lib/impl/jquery-1.6.1'], function() {
+define(['lib/externals'], function() {
     return $;
 });

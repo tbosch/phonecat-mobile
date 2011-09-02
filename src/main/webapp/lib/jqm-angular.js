@@ -1,4 +1,4 @@
-define(['plugin/global!lib/impl/jquery-mobile-angular-adapter:lib/jquery-mobile,lib/angular'], function() {
+define(['lib/externals'], function() {
     function updateView() {
         return $.mobile.globalScope().$service('$updateView')();
     }

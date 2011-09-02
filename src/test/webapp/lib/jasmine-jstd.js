@@ -1,1 +1,0 @@
-define(['plugin/global!lib/impl/JasmineAdapter:lib/jasmine,lib/jquery']);

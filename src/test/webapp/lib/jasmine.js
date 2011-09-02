@@ -1,3 +1,3 @@
-define(['plugin/global!lib/impl/jasmine'], function() {
+define(['lib/externals'], function() {
     return jasmine;
 });

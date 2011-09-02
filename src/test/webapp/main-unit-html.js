@@ -1,7 +1,6 @@
 require([
-    "lib/jquery-mobile-unit",
+    "lib/unit-html-externals",
     "lib/jasmine-html",
-    "lib/jqm-angular",
     "unit/ocxhrSpec",
     "unit/phoneServiceSpec",
     "unit/PhoneListCtrlSpec",
