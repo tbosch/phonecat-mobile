@@ -2,7 +2,7 @@
 main-ui-jstd.js
 ----------------
 plugin/order.js
-lib/impl/jquery-1.6.1.js
+lib/impl/jquery-1.6.2.js
 lib/impl/jasmine.js
 lib/impl/jasmine-ui.js
 lib/impl/JasmineAdapter.js
@@ -18,10 +18,10 @@ main-ui-jstd.js
 main-unit-jstd.js
 ----------------
 plugin/order.js
-lib/impl/jquery-1.6.1.js
+lib/impl/jquery-1.6.2.js
 lib/impl/jquery-mobile-noinit.js
-lib/impl/angular-0.9.15.js
-lib/impl/jquery.mobile-1.0b1-oc2.js
+lib/impl/angular-0.9.19.js
+lib/impl/jquery.mobile-1.0b2-oc1.js
 lib/impl/jquery-mobile-angular-adapter.js
 lib/impl/jasmine.js
 lib/impl/JasmineAdapter.js
@@ -43,10 +43,10 @@ main-unit-jstd.js
 main-unit-html.js
 ----------------
 plugin/order.js
-lib/impl/jquery-1.6.1.js
+lib/impl/jquery-1.6.2.js
 lib/impl/jquery-mobile-noinit.js
-lib/impl/angular-0.9.15.js
-lib/impl/jquery.mobile-1.0b1-oc2.js
+lib/impl/angular-0.9.19.js
+lib/impl/jquery.mobile-1.0b2-oc1.js
 lib/impl/jquery-mobile-angular-adapter.js
 lib/impl/jasmine.js
 lib/impl/jasmine-html.js
@@ -69,7 +69,7 @@ main-unit-html.js
 main-ui-html.js
 ----------------
 plugin/order.js
-lib/impl/jquery-1.6.1.js
+lib/impl/jquery-1.6.2.js
 lib/impl/jasmine.js
 lib/impl/jasmine-ui.js
 lib/impl/jasmine-html.js
