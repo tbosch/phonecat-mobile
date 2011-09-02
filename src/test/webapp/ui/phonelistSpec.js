@@ -128,7 +128,7 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], func
                 var $ = testwindow().$;
                 var listEntries = page.find('li.phone a');
                 var entry = $(listEntries[0]);
-                entry.trigger('vclick');
+                entry.trigger('click');
             });
             waitsForAsync();
             runs(function() {

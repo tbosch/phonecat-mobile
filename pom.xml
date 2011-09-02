@@ -63,14 +63,12 @@
                                 <module>
                                     <name>main-unit-jstd</name>
                                 </module>
-                                <!-- Only needed for debugging...
                                 <module>
                                     <name>main-unit-html</name>
                                 </module>
                                 <module>
                                     <name>main-ui-html</name>
                                 </module>
-                                -->
                             </modules>
                         </configuration>
                     </execution>
