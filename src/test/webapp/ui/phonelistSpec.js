@@ -2,19 +2,28 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
 
     describe('phonelist', function() {
         it('should show expected number of phones in a list', function() {
+            var xhrSpy;
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
+                var ocxhr = testwin.require('app/ocxhr');
+                var res = testwin.$.Deferred();
+                res.resolve(testData.twoPhones);
+                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
             });
             runs(function() {
                 var page = testutils.getCurrentPage();
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(testData.twoPhones.length);
+                expect(xhrSpy).toHaveBeenCalledWith('phones/phones.json', {dataType: 'json'});
             });
         });
 
         it('should show the names of the phones in a list', function() {
+            var xhrSpy;
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
+                var ocxhr = testwin.require('app/ocxhr');
+                var res = testwin.$.Deferred();
+                res.resolve(testData.twoPhones);
+                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
             });
             runs(function() {
                 var page = testutils.getCurrentPage();
@@ -29,8 +38,12 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
         });
 
         it('should sort by name when the sort buttons are clicked', function() {
+            var xhrSpy;
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
+                var ocxhr = testwin.require('app/ocxhr');
+                var res = testwin.$.Deferred();
+                res.resolve(testData.twoPhones);
+                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
             });
             runs(function() {
                 var page = testutils.getCurrentPage();
@@ -67,8 +80,12 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
         });
 
         it('should filter when a value is put into the search field', function() {
+            var xhrSpy;
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.twoPhones);
+                var ocxhr = testwin.require('app/ocxhr');
+                var res = testwin.$.Deferred();
+                res.resolve(testData.twoPhones);
+                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
             });
             waitsForAsync();
             runs(function() {
@@ -93,8 +110,12 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
         });
 
         it('should page with a pagesize of 10', function() {
+            var xhrSpy;
             loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.manyPhones);
+                var ocxhr = testwin.require('app/ocxhr');
+                var res = testwin.$.Deferred();
+                res.resolve(testData.manyPhones);
+                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
             });
             waitsForAsync();
             runs(function() {
