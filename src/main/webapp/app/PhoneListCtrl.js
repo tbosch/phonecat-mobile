@@ -1,4 +1,4 @@
-define(["app/phoneService"], function(phoneService) {
+define(["app/phoneService", "lib/angular"], function(phoneService, angular) {
 
     function PhoneListCtrl() {
         var self = this;
@@ -20,6 +20,8 @@ define(["app/phoneService"], function(phoneService) {
         return angular.Array.paged(this.phones, search, sort);
     }
 
-    return {PhoneListCtrl: PhoneListCtrl};
+    angular.controller('PhoneListCtrl', PhoneListCtrl);
+
+    return PhoneListCtrl;
 });
 

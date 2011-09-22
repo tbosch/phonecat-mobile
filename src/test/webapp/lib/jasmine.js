@@ -1,3 +1,5 @@
-define(['lib/externals'], function() {
-    return jasmine;
+define(function() {
+    if (typeof window !== undefined) {
+        return window.jasmine;
+    }
 });

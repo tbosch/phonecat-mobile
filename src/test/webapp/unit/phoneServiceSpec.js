@@ -1,8 +1,10 @@
-define(['lib/jasmine', 'lib/jquery', 'app/ocxhr', 'app/phoneService'], function(jasmine, $, ocxhr, service) {
+define(['lib/jasmine', 'lib/jquery', 'require', 'app/phoneService'], function(jasmine, $, require) {
     describe('phoneService', function() {
-        var mockXhr;
+        var mockXhr, service;
         beforeEach(function() {
-            mockXhr = spyOn(ocxhr, 'xhr');
+            mockXhr = jasmine.createSpy('xhr');
+            var serviceFactory = require.factories['app/phoneService'];
+            service = serviceFactory({xhr: mockXhr});
         });
 
         it('should call and return phones/phones.json as promise', function() {

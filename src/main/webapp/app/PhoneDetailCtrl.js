@@ -1,4 +1,4 @@
-define(["app/phoneService"], function(phoneService) {
+define(["app/phoneService", "lib/angular"], function(phoneService, angular) {
 
     function PhoneDetailCtrl() {
     }
@@ -12,5 +12,7 @@ define(["app/phoneService"], function(phoneService) {
         }
     }
 
-    return {PhoneDetailCtrl: PhoneDetailCtrl};
+    angular.controller('PhoneDetailCtrl', PhoneDetailCtrl);
+
+    return PhoneDetailCtrl;
 });

@@ -1,8 +1,8 @@
-define(["lib/jqm-angular", "lib/jquery"], function(jqmng, jquery) {
+define(["lib/angular", "lib/jquery"], function(angular, jquery) {
 
     function xhr(url, options) {
         var res = jquery.ajax(url, options);
-        res.always(jqmng.updateView);
+        res.always(angular.updateView);
         return res;
     }
 

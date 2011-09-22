@@ -1,9 +1,11 @@
-define(['lib/jasmine', 'lib/jquery', 'lib/jqm-angular', 'app/ocxhr'], function(jasmine, $, jqmng, ocxhr) {
+define(['lib/jasmine', 'lib/jquery', 'require', 'app/ocxhr'], function(jasmine, $, require) {
     describe('ocxhr', function() {
-        var ajaxSpy, updateViewSpy;
+        var ocxhr, ajaxSpy, updateViewSpy;
         beforeEach(function() {
-            ajaxSpy = spyOn($, 'ajax');
-            updateViewSpy = spyOn(jqmng, 'updateView');
+            ajaxSpy = jasmine.createSpy();
+            updateViewSpy = jasmine.createSpy();
+            var ocxhrFactory = require.factories['app/ocxhr'];
+            ocxhr = ocxhrFactory({updateView: updateViewSpy}, {ajax: ajaxSpy});
         });
         it('should call jquery.ajax', function() {
             var jqueryRes = $.Deferred();

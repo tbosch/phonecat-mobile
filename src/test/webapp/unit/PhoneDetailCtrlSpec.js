@@ -2,14 +2,17 @@ define([
     'phonesTestData',
     'lib/jasmine',
     'lib/jquery',
-    'app/phoneService',
-    'app/PhoneDetailCtrl'], function(testData, jasmine, $, phoneService, PhoneDetailCtrl) {
+    'require',
+    'lib/angular',
+    'app/PhoneDetailCtrl'], function(testData, jasmine, $, require, angular) {
 
     describe('PhoneDetailCtrl', function() {
-        var phonesSpy, phoneSpy;
+        var phonesSpy, phoneSpy, PhoneDetailCtrl;
         beforeEach(function() {
-            phonesSpy = spyOn(phoneService, 'phones');
-            phoneSpy = spyOn(phoneService, 'phone');
+            phonesSpy = jasmine.createSpy('phones');
+            phoneSpy = jasmine.createSpy('phone');
+            var ctrlFactory  = require.factories['app/PhoneDetailCtrl'];
+            PhoneDetailCtrl = ctrlFactory({phones: phonesSpy, phone: phoneSpy}, angular);
         });
 
         function createCtrl(phones, phone) {
@@ -19,7 +22,7 @@ define([
             var phonePromise = $.Deferred();
             phonePromise.resolve(phone);
             phoneSpy.andReturn(phonePromise);
-            return new PhoneDetailCtrl.PhoneDetailCtrl();
+            return new PhoneDetailCtrl();
         }
 
         it('should load the details of the selected phone from the calling scope ', function() {

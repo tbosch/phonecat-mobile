@@ -413,7 +413,9 @@ var requirejs, require, define;
                 defined: makeContextModuleFunc(context.requireDefined, relModuleMap),
                 specified: makeContextModuleFunc(context.requireSpecified, relModuleMap),
                 ready: req.ready,
-                isBrowser: req.isBrowser
+                isBrowser: req.isBrowser,
+                // PATCH TBO
+                factories: context.factories
             });
             //Something used by node.
             if (req.paths) {
@@ -609,6 +611,14 @@ var requirejs, require, define;
         }
 
         function main(inName, depArray, callback, relModuleMap) {
+            // -----------
+            // PATCH TBO
+            // Save module definitions into context
+            if (inName) {
+                context.factories[inName] = callback;
+            }
+            // END PATCH
+            // -----------
             var moduleMap = makeModuleMap(inName, relModuleMap),
                 name = moduleMap.name,
                 fullName = moduleMap.fullName,
@@ -1112,6 +1122,8 @@ var requirejs, require, define;
             defined: defined,
             paused: [],
             pausedCount: 0,
+            // PATCH TBO
+            factories: {},
             plugins: plugins,
             managerCallbacks: managerCallbacks,
             makeModuleMap: makeModuleMap,
@@ -1995,4 +2007,5 @@ var requirejs, require, define;
             req.checkReadyState();
         }, 0);
     }
+
 }());

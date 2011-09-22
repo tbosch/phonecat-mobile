@@ -1,4 +1,4 @@
-define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], function(testData, testutils, jasmine) {
+define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, testutils) {
     describe('phonedetail', function() {
         it('should show the name, description and images of the phone with the id', function() {
             loadHtml('/phonecat-mobile/index.html#phonedetail', function(testwin) {

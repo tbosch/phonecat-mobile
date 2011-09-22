@@ -7,9 +7,16 @@
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
     <script>opener && opener.instrument && opener.instrument(window);</script>
-    <script src="lib/require.js" data-main="main"></script>
 
-    <link rel="stylesheet" href="lib/impl/jquery.mobile-1.0b2-oc1.css"/>
+    <link rel="stylesheet" href="lib/jquery.mobile-1.0b2-oc1.css">
+    <script src="lib/jquery-mobile-angular-adapter-standalone-1.0.js"></script>
+    <script src="lib/require.js"></script>
+    <script src="main.js"></script>
+    <script>
+        require.s.contexts._.jQueryCheck();
+        require.s.contexts._.resume();
+    </script>
+
 
     <title>Google Phone Gallery</title>
 </head>

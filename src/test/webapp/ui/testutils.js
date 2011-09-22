@@ -1,4 +1,4 @@
-define(['lib/jasmine-ui'], function() {
+define(['lib/jasmine'], function(jasmine) {
 
     function getCurrentPage() {
         return testwindow().$.mobile.activePage;
@@ -48,7 +48,7 @@ define(['lib/jasmine-ui'], function() {
                 var result = xhrMock.results[url];
                 console.log(url, result);
                 if (result) {
-                    var res = $.Deferred();
+                    var res = window.$.Deferred();
                     if (result.success) {
                         res.resolve(result.data);
                         if (options && options.success) {

@@ -1,4 +1,4 @@
-define(['phonesTestData', 'ui/testutils', 'lib/jasmine', 'lib/jasmine-ui'], function(testData, testutils, jasmine) {
+define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, testutils) {
 
     describe('phonelist', function() {
         it('should show expected number of phones in a list', function() {

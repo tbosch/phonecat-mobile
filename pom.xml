@@ -10,7 +10,7 @@
     <properties>
         <browser>/Applications/Google Chrome.app/Contents/MacOS/Google Chrome</browser>
         <!-- Values: uglify, closure, none -->
-        <jsOptimizer>uglify</jsOptimizer>
+        <jsOptimizer>none</jsOptimizer>
     </properties>
 
     <build>
@@ -22,19 +22,18 @@
                 <version>0.2.3-SNAPSHOT</version>
                 <configuration>
                     <optimizeBuildDir>${basedir}/target/requirejs/build</optimizeBuildDir>
-                    <optimizeOutputDir>${basedir}/target/requirejs/optimized</optimizeOutputDir>
-                    <optimizedFileNameSuffix></optimizedFileNameSuffix>
+                    <optimizeOutputDir>${basedir}/target/requirejs/noop</optimizeOutputDir>
+                    <jsOptimizer>${jsOptimizer}</jsOptimizer>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>optimize-main</id>
+                        <id>build-main</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>optimize</goal>
                         </goals>
                         <configuration>
                             <optimizeSourceDir>${basedir}/src/main/webapp</optimizeSourceDir>
-                            <jsOptimizer>${jsOptimizer}</jsOptimizer>
                             <modules>
                                 <module>
                                     <name>main</name>
@@ -42,32 +41,20 @@
                             </modules>
                         </configuration>
                     </execution>
-
-                    <!-- This second execution relies on the fact that the first execution
-                         left the modules of src/main/webapp in the build directory -->
                     <execution>
-                        <id>optimize-test</id>
+                        <id>build-test</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>optimize</goal>
                         </goals>
                         <configuration>
                             <optimizeSourceDir>${basedir}/src/test/webapp</optimizeSourceDir>
-                             <!--Tests don't need optimization. Furthermore, optimization here would
-                                 optimize the files from src/main/webapp a second time.-->
-                            <jsOptimizer>none</jsOptimizer>
                             <modules>
                                 <module>
-                                    <name>main-ui-jstd</name>
+                                    <name>unit-tests</name>
                                 </module>
                                 <module>
-                                    <name>main-unit-jstd</name>
-                                </module>
-                                <module>
-                                    <name>main-unit-html</name>
-                                </module>
-                                <module>
-                                    <name>main-ui-html</name>
+                                    <name>ui-tests</name>
                                 </module>
                             </modules>
                         </configuration>
@@ -84,6 +71,10 @@
                     <stopPort>9999</stopPort>
                     <webAppConfig>
                         <contextPath>/${project.artifactId}</contextPath>
+                        <resourceBases>
+                            <resourceBase>src/main/webapp</resourceBase>
+                            <resourceBase>src/test/webapp</resourceBase>
+                        </resourceBases>
                     </webAppConfig>
                 </configuration>
             </plugin>
@@ -97,16 +88,9 @@
                     <webResources>
                         <resource>
                             <directory>target/requirejs/build</directory>
-                            <excludes>
-                                <!-- To also include the test files in the result, comment this out-->
-                                <exclude>**/jasmine*.*</exclude>
-                            </excludes>
                             <includes>
-                                <!-- To also include the test files in the result, uncomment this-->
-                                <!--include>**/*</include-->
+                                <include>**/*.js</include>
                                 <include>**/*.css</include>
-                                <include>**/main.js</include>
-                                <include>**/require.js</include>
                             </includes>
                         </resource>
                     </webResources>
@@ -116,27 +100,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <!-- Profile for normal development directly using the sources -->
-            <id>dev</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
-                        <configuration>
-                            <webAppConfig>
-                                <resourceBases>
-                                    <resourceBase>src/main/webapp</resourceBase>
-                                    <resourceBase>src/test/webapp</resourceBase>
-                                </resourceBases>
-                            </webAppConfig>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
         <profile>
             <!-- Profile for executing the integration tests, e.g. jstestdriver, ... -->
             <id>integration</id>
@@ -181,7 +144,11 @@
                         <groupId>org.mortbay.jetty</groupId>
                         <artifactId>jetty-maven-plugin</artifactId>
                         <configuration>
-                            <webAppSourceDirectory>${basedir}/target/${project.artifactId}</webAppSourceDirectory>
+                            <webAppConfig>
+                                <resourceBases>
+                                    <resourceBase>${basedir}/target/${project.artifactId}</resourceBase>
+                                </resourceBases>
+                            </webAppConfig>
                         </configuration>
                         <executions>
                             <execution>
