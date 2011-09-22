@@ -1,5 +1,5 @@
 /** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 0.26.0 Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
+ * @license RequireJS 0.25.0 Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
@@ -11,9 +11,9 @@
 var requirejs, require, define;
 (function () {
     //Change this version number for each release.
-    var version = "0.26.0",
+    var version = "0.25.0",
         commentRegExp = /(\/\*([\s\S]*?)\*\/|\/\/(.*)$)/mg,
-        cjsRequireRegExp = /require\(\s*["']([^'"\s]+)["']\s*\)/g,
+        cjsRequireRegExp = /require\(["']([^'"\s]+)["']\)/g,
         currDirRegExp = /^\.\//,
         jsSuffixRegExp = /\.js$/,
         ostring = Object.prototype.toString,
@@ -174,8 +174,7 @@ var requirejs, require, define;
                 waitSeconds: 7,
                 baseUrl: s.baseUrl || "./",
                 paths: {},
-                pkgs: {},
-                catchError: {}
+                pkgs: {}
             },
             defQueue = [],
             specified = {
@@ -239,7 +238,7 @@ var requirejs, require, define;
             var pkgName, pkgConfig;
 
             //Adjust any relative paths.
-            if (name && name.charAt(0) === ".") {
+            if (name.charAt(0) === ".") {
                 //If have a base name, try to normalize against it,
                 //otherwise, assume it is a top-level require that will
                 //be relative to baseUrl in the end.
@@ -320,7 +319,7 @@ var requirejs, require, define;
                         //it has a normalize method. To avoid possible
                         //ambiguity with relative names loaded from another
                         //plugin, use the parent's name as part of this name.
-                        normalizedName = '__$p' + parentName + '@' + (name || '');
+                        normalizedName = '__$p' + parentName + '@' + name;
                     }
                 } else {
                     normalizedName = normalize(name, parentName);
@@ -348,7 +347,7 @@ var requirejs, require, define;
                 parentMap: parentModuleMap,
                 url: url,
                 originalName: originalName,
-                fullName: prefix ? prefix + "!" + (normalizedName || '') : normalizedName
+                fullName: prefix ? prefix + "!" + normalizedName : normalizedName
             };
         }
 
@@ -414,7 +413,9 @@ var requirejs, require, define;
                 defined: makeContextModuleFunc(context.requireDefined, relModuleMap),
                 specified: makeContextModuleFunc(context.requireSpecified, relModuleMap),
                 ready: req.ready,
-                isBrowser: req.isBrowser
+                isBrowser: req.isBrowser,
+                // PATCH TBO
+                factories: context.factories
             });
             //Something used by node.
             if (req.paths) {
@@ -527,7 +528,7 @@ var requirejs, require, define;
         }
 
         function execManager(manager) {
-            var i, ret, waitingCallbacks, err, errFile,
+            var i, ret, waitingCallbacks, err,
                 cb = manager.callback,
                 fullName = manager.fullName,
                 args = [],
@@ -543,14 +544,10 @@ var requirejs, require, define;
                     }
                 }
 
-                if (config.catchError.define) {
-                    try {
-                        ret = req.execCb(fullName, manager.callback, args, defined[fullName]);
-                    } catch (e) {
-                        err = e;
-                    }
-                } else {
+                try {
                     ret = req.execCb(fullName, manager.callback, args, defined[fullName]);
+                } catch (e) {
+                    err = e;
                 }
 
                 if (fullName) {
@@ -589,12 +586,10 @@ var requirejs, require, define;
             }
 
             if (err) {
-                errFile = (fullName ? makeModuleMap(fullName).url : '') ||
-                           err.fileName || err.sourceURL;
                 err = makeError('defineerror', 'Error evaluating ' +
                                 'module "' + fullName + '" at location "' +
-                                errFile + '":\n' +
-                                err + '\nfileName:' + errFile +
+                                (fullName ? makeModuleMap(fullName).url : '') + '":\n' +
+                                err + '\nfileName:' + (err.fileName || err.sourceURL) +
                                 '\nlineNumber: ' + (err.lineNumber || err.line), err);
                 err.moduleName = fullName;
                 return req.onError(err);
@@ -616,6 +611,14 @@ var requirejs, require, define;
         }
 
         function main(inName, depArray, callback, relModuleMap) {
+            // -----------
+            // PATCH TBO
+            // Save module definitions into context
+            if (inName) {
+                context.factories[inName] = callback;
+            }
+            // END PATCH
+            // -----------
             var moduleMap = makeModuleMap(inName, relModuleMap),
                 name = moduleMap.name,
                 fullName = moduleMap.fullName,
@@ -991,7 +994,7 @@ var requirejs, require, define;
         function loadPaused(dep) {
             //Renormalize dependency if its name was waiting on a plugin
             //to load, which as since loaded.
-            if (dep.prefix && dep.name && dep.name.indexOf('__$p') === 0 && defined[dep.prefix]) {
+            if (dep.prefix && dep.name.indexOf('__$p') === 0 && defined[dep.prefix]) {
                 dep = makeModuleMap(dep.originalName, dep.parentMap);
             }
 
@@ -1119,6 +1122,8 @@ var requirejs, require, define;
             defined: defined,
             paused: [],
             pausedCount: 0,
+            // PATCH TBO
+            factories: {},
             plugins: plugins,
             managerCallbacks: managerCallbacks,
             makeModuleMap: makeModuleMap,
@@ -1270,7 +1275,7 @@ var requirejs, require, define;
                         resume();
                     }
                 }
-                return context.require;
+                return undefined;
             },
 
             /**
@@ -1483,14 +1488,6 @@ var requirejs, require, define;
     };
 
     /**
-     * Support require.config() to make it easier to cooperate with other
-     * AMD loaders on globally agreed names.
-     */
-    req.config = function (config) {
-        return req(config);
-    };
-
-    /**
      * Export require as a global, but only if it does not already exist.
      */
     if (typeof require === "undefined") {
@@ -1638,12 +1635,13 @@ var requirejs, require, define;
         //work.
         if (useInteractive) {
             node = currentlyAddingScript || getInteractiveScript();
-            if (node) {
-                if (!name) {
-                    name = node.getAttribute("data-requiremodule");
-                }
-                context = contexts[node.getAttribute("data-requirecontext")];
+            if (!node) {
+                return req.onError(makeError("interactive", "No matching script interactive for " + callback));
             }
+            if (!name) {
+                name = node.getAttribute("data-requiremodule");
+            }
+            context = contexts[node.getAttribute("data-requirecontext")];
         }
 
         //Always save off evaluating the def call until the script onload handler.
@@ -2009,4 +2007,5 @@ var requirejs, require, define;
             req.checkReadyState();
         }, 0);
     }
+
 }());

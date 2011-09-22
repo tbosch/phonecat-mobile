@@ -1,10 +1,9 @@
-define(['lib/jasmine', 'lib/jquery', 'require', 'app/ocxhr'], function(jasmine, $, require) {
+define(['lib/jasmine', 'lib/jquery', 'lib/factory!app/ocxhr'], function(jasmine, $, ocxhrFactory) {
     describe('ocxhr', function() {
         var ocxhr, ajaxSpy, updateViewSpy;
         beforeEach(function() {
             ajaxSpy = jasmine.createSpy();
             updateViewSpy = jasmine.createSpy();
-            var ocxhrFactory = require.factories['app/ocxhr'];
             ocxhr = ocxhrFactory({updateView: updateViewSpy}, {ajax: ajaxSpy});
         });
         it('should call jquery.ajax', function() {

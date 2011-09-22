@@ -2,15 +2,13 @@ define([
     'phonesTestData',
     'lib/jasmine',
     'lib/jquery',
-    'require',
     'lib/angular',
-    'app/PhoneListCtrl'], function(testData, jasmine, $, require, angular) {
+    'lib/factory!app/PhoneListCtrl'], function(testData, jasmine, $, angular, ctrlFactory) {
     describe('PhoneListCtrl', function() {
         var phonesSpy, phoneSpy, PhoneListCtrl;
         beforeEach(function() {
             phonesSpy = jasmine.createSpy('phones');
             phoneSpy = jasmine.createSpy('phone');
-            var ctrlFactory  = require.factories['app/PhoneListCtrl'];
             PhoneListCtrl = ctrlFactory({phones: phonesSpy, phone: phoneSpy}, angular);
         });
 

@@ -1,9 +1,8 @@
-define(['lib/jasmine', 'lib/jquery', 'require', 'app/phoneService'], function(jasmine, $, require) {
+define(['lib/jasmine', 'lib/jquery', 'lib/factory!app/phoneService'], function(jasmine, $, serviceFactory) {
     describe('phoneService', function() {
         var mockXhr, service;
         beforeEach(function() {
             mockXhr = jasmine.createSpy('xhr');
-            var serviceFactory = require.factories['app/phoneService'];
             service = serviceFactory({xhr: mockXhr});
         });
 
