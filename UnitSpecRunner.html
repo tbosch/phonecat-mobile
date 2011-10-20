@@ -1,22 +1,26 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
-<!--
-  This file contains all needed code to run jasmine and jasmine ui tests.
-  Add your test files at the end -->
 <head>
-    <title>Jasmine Test Runner</title>
+    <link rel="stylesheet" href="lib/jasmine.css">
 
-    <link rel="stylesheet" href="lib/impl/jasmine.css"/>
+    <script src="lib/jquery.mobile.noinit.js"></script>
+    <script src="lib/jquery-mobile-angular-adapter-standalone-1.0.3-SNAPSHOT.js"></script>
 
-<!-- #################################################################################################
-     #### ADD YOUR LIBS AND SPECS HERE ###############################################################
-     ################################################################################################# -->
-    <script src="lib/require.js" data-main="main-unit-html"></script>
+    <script src="lib/jasmine-1.0.1.js"></script>
+    <script src="lib/jasmine-html.js"></script>
 
-<!-- ################################################################################################# -->
-
+    <script src="lib/require.js"></script>
+    <script src="unit-tests.js"></script>
+    <script>
+        require.s.contexts._.jQueryCheck();
+        require.s.contexts._.resume();
+        require.ready(function() {
+            jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+            jasmine.getEnv().execute();
+        });
+    </script>
 </head>
 <body>
+
 </body>
 </html>

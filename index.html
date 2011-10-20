@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:ng="http://angularjs.org/">
+<html xmlns:ng="http://angularjs.org/" xmlns:ngm="http://github.com/tigbro/jquery-mobile-angular-adapter">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
@@ -7,43 +7,50 @@
     <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
     <script>opener && opener.instrument && opener.instrument(window);</script>
-    <script src="lib/require.js" data-main="main"></script>
 
-    <link rel="stylesheet" href="lib/impl/jquery.mobile-1.0b2-oc1.css"/>
+    <link rel="stylesheet" href="lib/jquery.mobile-1.0b3-oc1.css">
+    <script src="lib/jquery-mobile-angular-adapter-standalone-1.0.3-SNAPSHOT.js"></script>
+    <script src="lib/require.js"></script>
+    <script src="main.js"></script>
+    <script>
+        require.s.contexts._.jQueryCheck();
+        require.s.contexts._.resume();
+    </script>
+
 
     <title>Google Phone Gallery</title>
 </head>
-<body style="display: none">
-<div data-role="page" id="phonelist" ng:controller="PhoneListCtrl">
+<body style="display: none" ng:controller="PhoneCtrl">
+<div data-role="page" id="phonelist">
     <div data-role="header" data-backbtn="false">
         <h1>Phones</h1>
-        <a href="" class="sortUp" data-icon="arrow-u" ngm:click="sortDescend = false"></a>
-        <a href="" class="sortDown" data-icon="arrow-d" ngm:click="sortDescend = true"></a>
+        <a href="" class="sortUp" data-icon="arrow-u" ngm:click="phonesListState.sortDescend = false"></a>
+        <a href="" class="sortDown" data-icon="arrow-d" ngm:click="phonesListState.sortDescend = true"></a>
 
     </div>
     <div data-role="content">
         <ul data-role="listview">
             <li>
-                <input data-type="search" class="search" placeholder="Search" name="search" autofocus/>
+                <input data-type="search" class="search" placeholder="Search" name="phonesListState.search" autofocus/>
             </li>
             <li ng:repeat="phone in pagedPhones()" class="phone">
-                <a href="#phonedetail" ngm:click="$parent.selectedPhone = phone">{{phone.name}}</a>
+                <a href="#phonedetail" ngm:click="selectPhone(phone)">{{phone.name}}</a>
             </li>
-            <li ng:if="pagedPhones().hasMorePages()">
+            <li ngm:if="pagedPhones().hasMorePages()">
                 <a href="#" data-theme="c" class="loadNext noCornerRadius" ngm:click="pagedPhones().loadNextPage()">Load next...</a>
             </li>
         </ul>
     </div>
 </div>
 
-<div data-role="page" id="phonedetail" ng:controller="PhoneDetailCtrl">
+<div data-role="page" id="phonedetail">
     <div data-role="header">
-        <h1 class="phonename">{{data.name}}</h1>
+        <h1 class="phonename">{{selectedPhone.name}}</h1>
         <a href="" data-rel="back" data-role="button">Back</a>
     </div>
     <div data-role="content">
-        <div data-role="fieldcontain" class="phonedesc">{{data.description}}</div>
-        <div data-role="fieldcontain" ng:repeat="image in data.images">
+        <div data-role="fieldcontain" class="phonedesc">{{selectedPhone.description}}</div>
+        <div data-role="fieldcontain" ng:repeat="image in selectedPhone.images">
             <img ng:src="{{image}}" width="100%" class="phoneimg">
         </div>
     </div>
