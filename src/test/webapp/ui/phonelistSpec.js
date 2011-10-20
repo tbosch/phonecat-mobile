@@ -1,33 +1,29 @@
-define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, testutils) {
+define(['phonesTestData'], function(testData) {
+
+    function visitPhoneListPage(phones, phone) {
+        loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
+            var phoneService = testwin.require('app/phoneService');
+            spyOn(phoneService, 'phones').andReturn(testwin.$.Deferred().resolve(phones));
+            spyOn(phoneService, 'phone').andReturn(testwin.$.Deferred().resolve(phone));
+        });
+    }
 
     describe('phonelist', function() {
         it('should show expected number of phones in a list', function() {
-            var xhrSpy;
-            loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                var ocxhr = testwin.require('app/ocxhr');
-                var res = testwin.$.Deferred();
-                res.resolve(testData.twoPhones);
-                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
-            });
+            visitPhoneListPage(testData.twoPhones);
             runs(function() {
-                var page = testutils.getCurrentPage();
+                var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(testData.twoPhones.length);
-                expect(xhrSpy).toHaveBeenCalledWith('phones/phones.json', {dataType: 'json'});
             });
         });
 
         it('should show the names of the phones in a list', function() {
-            var xhrSpy;
-            loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                var ocxhr = testwin.require('app/ocxhr');
-                var res = testwin.$.Deferred();
-                res.resolve(testData.twoPhones);
-                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
-            });
+            visitPhoneListPage(testData.twoPhones);
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 for (var i = 0; i < listEntries.length; i++) {
                     var li = $(listEntries[i]);
@@ -38,23 +34,18 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
         });
 
         it('should sort by name when the sort buttons are clicked', function() {
-            var xhrSpy;
-            loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                var ocxhr = testwin.require('app/ocxhr');
-                var res = testwin.$.Deferred();
-                res.resolve(testData.twoPhones);
-                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
-            });
+            visitPhoneListPage(testData.twoPhones);
             runs(function() {
-                var page = testutils.getCurrentPage();
+                var $ = testwindow().$;
+                var page = $("#phonelist");
                 var sortButtons = page.find('.sortUp');
                 expect(sortButtons.length).toEqual(1);
                 sortButtons.trigger('vclick');
             });
             waitsForAsync();
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 for (var i = 0; i < listEntries.length; i++) {
                     var li = $(listEntries[i]);
@@ -68,8 +59,8 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
             });
             waitsForAsync();
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 for (var i = 0; i < listEntries.length; i++) {
                     var li = $(listEntries[i]);
@@ -80,17 +71,10 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
         });
 
         it('should filter when a value is put into the search field', function() {
-            var xhrSpy;
-            loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                var ocxhr = testwin.require('app/ocxhr');
-                var res = testwin.$.Deferred();
-                res.resolve(testData.twoPhones);
-                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
-            });
-            waitsForAsync();
+            visitPhoneListPage(testData.twoPhones);
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(testData.twoPhones.length);
                 var filterText = page.find('.search');
@@ -100,8 +84,8 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
             });
             waitsForAsync();
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(1);
                 var text = $.trim(listEntries.text());
@@ -110,17 +94,10 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
         });
 
         it('should page with a pagesize of 10', function() {
-            var xhrSpy;
-            loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                var ocxhr = testwin.require('app/ocxhr');
-                var res = testwin.$.Deferred();
-                res.resolve(testData.manyPhones);
-                xhrSpy = spyOn(ocxhr, 'xhr').andReturn(res);
-            });
-            waitsForAsync();
+            visitPhoneListPage(testData.manyPhones);
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(10);
                 var loadNextButton = page.find('.loadNext');
@@ -129,8 +106,8 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
             });
             waitsForAsync();
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone');
                 expect(listEntries.length).toEqual(testData.manyPhones.length);
                 var loadNextButton = page.find('.loadNext');
@@ -140,22 +117,19 @@ define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, tes
         });
 
         it('should navigate to detail page when a phone is clicked', function() {
-            loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-                testutils.addXhrMock(testwin, 'phones/phones.json', true, testData.onePhone);
-                testutils.addXhrMock(testwin, 'phones/motorola-xoom-with-wi-fi.json', true, testData.onePhoneDetail);
-            });
+            visitPhoneListPage(testData.onePhone, testData.onePhoneDetail);
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
+                var page = $("#phonelist");
                 var listEntries = page.find('li.phone a');
                 var entry = $(listEntries[0]);
                 entry.trigger('click');
             });
             waitsForAsync();
             runs(function() {
-                var page = testutils.getCurrentPage();
                 var $ = testwindow().$;
-                expect(page.attr('id')).toEqual('phonedetail');
+                expect($.mobile.activePage.attr('id')).toEqual('phonedetail');
+                var page = $("#phonedetail");
                 var text = $.trim(page.find('h1').text());
                 expect(text).toEqual(testData.onePhone[0].name);
             });

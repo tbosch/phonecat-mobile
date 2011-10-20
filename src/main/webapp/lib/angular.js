@@ -1,4 +1,4 @@
-define('lib/angular', function() {
+define('lib/angular', ['lib/jquery'], function($) {
     var angular;
     if (typeof window !== 'undefined') {
         angular = window.angular;
@@ -11,17 +11,14 @@ define('lib/angular', function() {
         return globalScope;
     }
 
-    function updateView() {
-        return getGlobalScope().$service("$updateView")();
-    }
-
     function controller(name, ctrl) {
         window[name] = ctrl;
     }
 
-    angular.updateView = updateView;
     angular.controller = controller;
+    angular.service = function(name) {
+        return getGlobalScope().$service(name);
+    };
+
     return angular;
-
-
 });

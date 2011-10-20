@@ -3,6 +3,5 @@
  */
 require([
     'ui/phonedetailSpec',
-    'ui/phonelistSpec',
-    'ui/testutils'
+    'ui/phonelistSpec'
 ]);

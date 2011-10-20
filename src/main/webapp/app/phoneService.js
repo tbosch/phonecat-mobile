@@ -1,11 +1,19 @@
-define(["app/ocxhr"], function(xhr) {
+define(["lib/angular", "lib/jquery"], function(angular, $) {
 
     function phones() {
-        return xhr.xhr('phones/phones.json', {dataType:"json"});
+        var res = $.Deferred();
+        angular.service("$xhr")('GET', 'phones/phones.json', res.resolve, res.reject);
+        return res.pipe(function(code, data) {
+            return data;
+        });
     }
 
     function phone(id) {
-        return xhr.xhr('phones/' + id + '.json', {dataType:"json"});
+        var res = $.Deferred();
+        angular.service("$xhr")('GET', 'phones/' + id + '.json', res.resolve, res.reject);
+        return res.pipe(function(code, data) {
+            return data;
+        });
     }
 
     return {

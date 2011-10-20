@@ -1,13 +1,20 @@
-define(['phonesTestData', 'ui/testutils', 'lib/jasmine'], function(testData, testutils) {
+define(['phonesTestData', 'lib/jasmine'], function(testData) {
+    function visitPhoneDetailPage(phones, phone) {
+        loadHtml('/phonecat-mobile/index.html#phonedetail', function(testwin) {
+            var phoneService = testwin.require('app/phoneService');
+            spyOn(phoneService, 'phones').andReturn(testwin.$.Deferred().resolve(phones));
+            spyOn(phoneService, 'phone').andReturn(testwin.$.Deferred().resolve(phone));
+        });
+    }
+
     describe('phonedetail', function() {
         it('should show the name, description and images of the phone with the id', function() {
-            loadHtml('/phonecat-mobile/index.html#phonedetail', function(testwin) {
-                testutils.addXhrMock(testwin, 'phones/10.json', true, testData.onePhoneDetail);
-                testutils.setOnActivateArguments(testwin.PhoneDetailCtrl, {selectedPhone: {id:10}});
-            });
+            visitPhoneDetailPage(testData.onePhone, testData.onePhoneDetail);
             runs(function() {
                 var $ = testwindow().$;
-                var page = testutils.getCurrentPage();
+                var page = $("#phonedetail");
+                page.scope().selectPhone(testData.onePhone[0]);
+                page.scope().$root.$eval();
                 var name = page.find('.phonename');
                 expect($.trim(name.text())).toEqual(testData.onePhoneDetail.name);
                 var desc = page.find('.phonedesc');

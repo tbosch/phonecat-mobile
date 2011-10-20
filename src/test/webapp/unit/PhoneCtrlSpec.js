@@ -3,21 +3,24 @@ define([
     'lib/jasmine',
     'lib/jquery',
     'lib/angular',
-    'lib/factory!app/PhoneListCtrl'], function(testData, jasmine, $, angular, ctrlFactory) {
-    describe('PhoneListCtrl', function() {
-        var phonesSpy, phoneSpy, PhoneListCtrl;
+    'lib/factory!app/PhoneCtrl'], function(testData, jasmine, $, angular, ctrlFactory) {
+    describe('PhoneCtrl', function() {
+        var phonesSpy, phoneSpy, PhoneCtrl;
         beforeEach(function() {
             phonesSpy = jasmine.createSpy('phones');
             phoneSpy = jasmine.createSpy('phone');
-            PhoneListCtrl = ctrlFactory({phones: phonesSpy, phone: phoneSpy}, angular);
+            PhoneCtrl = ctrlFactory({phones: phonesSpy, phone: phoneSpy}, angular);
         });
 
 
-        function createCtrl(phones) {
+        function createCtrl(phones, phone) {
+            var phonesPromise = $.Deferred();
+            phonesPromise.resolve(phones);
+            phonesSpy.andReturn(phonesPromise);
             var phonePromise = $.Deferred();
-            phonePromise.resolve(phones);
-            phonesSpy.andReturn(phonePromise);
-            return new PhoneListCtrl();
+            phonePromise.resolve(phone);
+            phoneSpy.andReturn(phonePromise);
+            return new PhoneCtrl();
         }
 
         it('should contain a phones property with the expected list of phones', function() {
@@ -33,16 +36,22 @@ define([
 
         it('should return a filtered list for pagedPhones', function() {
             var ctrl = createCtrl(testData.twoPhones);
-            ctrl.search = 'Wi';
+            ctrl.phonesListState.search = 'Wi';
             expect(ctrl.pagedPhones().length).toEqual(1);
         });
 
         it('should return a sorted list for pagedPhones', function() {
             var ctrl = createCtrl(testData.twoPhones);
-            ctrl.sortDescend = true;
+            ctrl.phonesListState.sortDescend = true;
             expect(ctrl.pagedPhones()[0].name).toEqual("Motorola XOOM\u2122 with Wi-Fi");
-            ctrl.sortDescend = false;
+            ctrl.phonesListState.sortDescend = false;
             expect(ctrl.pagedPhones()[0].name).toEqual("MOTOROLA XOOM\u2122");
         });
+
+        it('should load the details of the selected phone', function() {
+            var ctrl = createCtrl([], testData.onePhoneDetail);
+            ctrl.selectPhone({id: 'motorola-xoom-with-wi-fi'});
+            expect(ctrl.selectedPhone).toBe(testData.onePhoneDetail);
+        })
     });
 });

@@ -1,6 +1,5 @@
 require([
-    "app/PhoneListCtrl",
-    "app/PhoneDetailCtrl",
+    "app/PhoneCtrl"
 ], function() {
     $("body").show();
 });
