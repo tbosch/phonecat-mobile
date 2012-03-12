@@ -1,15 +1,12 @@
 define([
     'phonesTestData',
-    'lib/jasmine',
     'lib/jquery',
-    'lib/angular',
-    'lib/factory!app/PhoneCtrl'], function(testData, jasmine, $, angular, ctrlFactory) {
+    'app/PhoneCtrl'], function(testData, $, PhoneCtrl) {
     describe('PhoneCtrl', function() {
-        var phonesSpy, phoneSpy, PhoneCtrl;
+        var phonesSpy, phoneSpy;
         beforeEach(function() {
             phonesSpy = jasmine.createSpy('phones');
             phoneSpy = jasmine.createSpy('phone');
-            PhoneCtrl = ctrlFactory({phones: phonesSpy, phone: phoneSpy}, angular);
         });
 
 
@@ -20,7 +17,7 @@ define([
             var phonePromise = $.Deferred();
             phonePromise.resolve(phone);
             phoneSpy.andReturn(phonePromise);
-            return new PhoneCtrl();
+            return new PhoneCtrl({phones: phonesSpy, phone: phoneSpy});
         }
 
         it('should contain a phones property with the expected list of phones', function() {

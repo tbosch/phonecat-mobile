@@ -1,9 +1,7 @@
-define(['phonesTestData', 'lib/jasmine'], function(testData) {
+define(['phonesTestData', 'ui/testhelper'], function(testData) {
     function visitPhoneDetailPage(phones, phone) {
         loadHtml('/phonecat-mobile/index.html#phonedetail', function(testwin) {
-            var phoneService = testwin.require('app/phoneService');
-            spyOn(phoneService, 'phones').andReturn(testwin.$.Deferred().resolve(phones));
-            spyOn(phoneService, 'phone').andReturn(testwin.$.Deferred().resolve(phone));
+            mockPhonesService(testwin, phones, phone);
         });
     }
 

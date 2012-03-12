@@ -1,11 +1,12 @@
-define(["app/phoneService", "lib/angular"], function(phoneService, angular) {
+define(["lib/angular"], function(angular) {
 
-    function PhoneCtrl() {
+    function PhoneCtrl(phoneService) {
         var self = this;
         this.phonesListState = {
             sortDescend : false,
             search : null
         };
+        this.phoneService = phoneService;
         this.phones = [];
         phoneService.phones().done(function(phones) {
             self.phones = phones;
@@ -24,11 +25,13 @@ define(["app/phoneService", "lib/angular"], function(phoneService, angular) {
         },
         selectPhone: function(phone) {
             var self = this;
-            phoneService.phone(phone.id).done(function(phone) {
+            this.phoneService.phone(phone.id).done(function(phone) {
                 self.selectedPhone = phone;
             });
         }
     };
+
+    PhoneCtrl.$inject = ["phoneService"];
 
     angular.controller('PhoneCtrl', PhoneCtrl);
 

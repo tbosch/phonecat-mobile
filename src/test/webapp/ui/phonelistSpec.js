@@ -1,10 +1,8 @@
-define(['phonesTestData'], function(testData) {
+define(['phonesTestData', 'ui/testhelper'], function(testData) {
 
     function visitPhoneListPage(phones, phone) {
         loadHtml('/phonecat-mobile/index.html#phonelist', function(testwin) {
-            var phoneService = testwin.require('app/phoneService');
-            spyOn(phoneService, 'phones').andReturn(testwin.$.Deferred().resolve(phones));
-            spyOn(phoneService, 'phone').andReturn(testwin.$.Deferred().resolve(phone));
+            mockPhonesService(testwin, phones, phone);
         });
     }
 

@@ -1,12 +1,9 @@
-define(['lib/jasmine', 'lib/jquery', 'lib/factory!app/phoneService'], function(jasmine, $, serviceFactory) {
+define(['lib/jquery', 'app/phoneService'], function($, phoneServiceFactory) {
     describe('phoneService', function() {
         var mockXhr, service;
         beforeEach(function() {
             mockXhr = jasmine.createSpy('xhr');
-            var mockAngularService = function(name) {
-                return mockXhr;
-            };
-            service = serviceFactory({service: mockAngularService}, $);
+            service = phoneServiceFactory(mockXhr);
         });
 
         it('should call and return phones/phones.json as promise', function() {

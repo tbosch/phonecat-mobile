@@ -29,4 +29,4 @@ Live Versions
 Build process
 -------------
 - mvn package: Will create a war with combined and optimized javascript
-- mvn integration-test -Pintegration: Will execute the js-test-driver tests.
+- mvn integration-test -Pintegration: Will start the webserver, open a browser and execute the js-test-driver tests.
