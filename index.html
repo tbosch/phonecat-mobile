@@ -8,13 +8,13 @@
 
     <script>opener && opener.instrument && opener.instrument(window);</script>
 
-    <link rel="stylesheet" href="lib/jquery.mobile-1.0b3-oc1.css">
-    <script src="lib/jquery-mobile-angular-adapter-standalone-1.0.3-SNAPSHOT.js"></script>
-    <script src="lib/require.js"></script>
-    <script src="main.js"></script>
+    <link rel="stylesheet" href="lib/jquery.mobile-1.1.0-rc.1-oc1.css">
+    <script src="lib/jquery-mobile-angular-adapter-standalone-1.0.6.js"></script>
+    <script src="lib/require.js" data-main="main.js"></script>
     <script>
+        // This will ensure the integration of requirejs and jquery, as
+        // we do not load jquery via requirejs.
         require.s.contexts._.jQueryCheck();
-        require.s.contexts._.resume();
     </script>
 
 

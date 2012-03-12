@@ -2,20 +2,18 @@
 unit-tests.js
 ----------------
 phonesTestData.js
-lib/jasmine.js
 lib/jquery.js
 lib/angular.js
-lib/factory.js
-lib/factory!app/PhoneCtrl
+app/PhoneCtrl.js
 unit/PhoneCtrlSpec.js
-lib/factory!app/phoneService
+app/phoneService.js
 unit/phoneServiceSpec.js
 unit-tests.js
 
 ui-tests.js
 ----------------
 phonesTestData.js
-lib/jasmine.js
+ui/testhelper.js
 ui/phonedetailSpec.js
 ui/phonelistSpec.js
 ui-tests.js

@@ -1,21 +1,8 @@
 
-define('lib/jquery', function() {
-    if (typeof window !== 'undefined') {
-        return window.$;
-    }
-});
-
-define('lib/angular', ['lib/jquery'], function($) {
+define('lib/angular', [], function () {
     var angular;
     if (typeof window !== 'undefined') {
         angular = window.angular;
-    }
-    var globalScope;
-    function getGlobalScope() {
-        if (!globalScope) {
-            globalScope = $("body").scope();
-        }
-        return globalScope;
     }
 
     function controller(name, ctrl) {
@@ -23,45 +10,59 @@ define('lib/angular', ['lib/jquery'], function($) {
     }
 
     angular.controller = controller;
-    angular.service = function(name) {
-        return getGlobalScope().$service(name);
-    };
 
     return angular;
 });
 
-define('app/phoneService',["lib/angular", "lib/jquery"], function(angular, $) {
-
-    function phones() {
-        var res = $.Deferred();
-        angular.service("$xhr")('GET', 'phones/phones.json', res.resolve, res.reject);
-        return res.pipe(function(code, data) {
-            return data;
-        });
-    }
-
-    function phone(id) {
-        var res = $.Deferred();
-        angular.service("$xhr")('GET', 'phones/' + id + '.json', res.resolve, res.reject);
-        return res.pipe(function(code, data) {
-            return data;
-        });
-    }
-
-    return {
-        phones: phones,
-        phone: phone
+define('lib/jquery',[], function() {
+    if (typeof window !== 'undefined') {
+        return window.$;
     }
 });
 
-define('app/PhoneCtrl',["app/phoneService", "lib/angular"], function(phoneService, angular) {
+define('app/phoneService',["lib/angular", "lib/jquery"], function (angular, $) {
 
-    function PhoneCtrl() {
+    function phoneServiceFactory($xhr) {
+
+        function phones() {
+            var res = $.Deferred();
+            $xhr('GET', 'phones/phones.json', res.resolve, res.reject);
+            return res.pipe(function (code, data) {
+                return data;
+            });
+        }
+
+        function phone(id) {
+            var res = $.Deferred();
+            $xhr('GET', 'phones/' + id + '.json', res.resolve, res.reject);
+            return res.pipe(function (code, data) {
+                return data;
+            });
+        }
+
+        return {
+            phones:phones,
+            phone:phone
+        }
+    }
+
+    phoneServiceFactory.$inject = ['$xhr'];
+
+    angular.service("phoneService", phoneServiceFactory);
+
+    return phoneServiceFactory;
+
+});
+
+define('app/PhoneCtrl',["lib/angular"], function(angular) {
+
+    function PhoneCtrl(phoneService) {
         var self = this;
         this.phonesListState = {
             sortDescend : false,
             search : null
         };
+        this.phoneService = phoneService;
         this.phones = [];
         phoneService.phones().done(function(phones) {
             self.phones = phones;
@@ -80,11 +81,13 @@ define('app/PhoneCtrl',["app/phoneService", "lib/angular"], function(phoneServic
         },
         selectPhone: function(phone) {
             var self = this;
-            phoneService.phone(phone.id).done(function(phone) {
+            this.phoneService.phone(phone.id).done(function(phone) {
                 self.selectedPhone = phone;
             });
         }
     };
+
+    PhoneCtrl.$inject = ["phoneService"];
 
     angular.controller('PhoneCtrl', PhoneCtrl);
 
@@ -92,6 +95,7 @@ define('app/PhoneCtrl',["app/phoneService", "lib/angular"], function(phoneServic
 });
 
 require([
+    "app/phoneService",
     "app/PhoneCtrl"
 ], function() {
     $("body").show();
